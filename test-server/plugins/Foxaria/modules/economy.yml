@@ -1,0 +1,8 @@
+starting-balance: 0.0
+transfer-fee-percent: 2.5
+daily-reward:
+  enabled: false
+  amount: 25.0
+secondary-currency:
+  enabled: true
+  name: tokens

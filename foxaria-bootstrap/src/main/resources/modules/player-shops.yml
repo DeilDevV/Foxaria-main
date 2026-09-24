@@ -1,0 +1,4 @@
+max-active-offers: 24
+default-tax-percent: 4.0
+inspect-inactive-offers: true
+require-free-slot-to-buy: true

@@ -1,0 +1,30 @@
+staff-panels:
+  enabled: true
+  register-commands: true
+
+anti-spam:
+  message-window-seconds: 4
+  max-identical-messages: 3
+  max-messages-per-window: 6
+chat-filter:
+  enabled: true
+  min-caps-length: 12
+  max-caps-ratio: 0.75
+  blocked-phrases:
+    - "discord.gg/freeop"
+    - "ez hacked"
+anti-bot:
+  enabled: true
+  min-join-interval-millis: 500
+  burst-window-millis: 10000
+  max-joins-per-window: 3
+  kick-message: "&cСлишком много подключений. Попробуйте снова через несколько секунд."
+staff-tools:
+  vanish-default: false
+  socialspy-default: false
+  commandspy-default: false
+frozen-allowed-commands:
+  - "msg"
+  - "tell"
+  - "w"
+  - "r"

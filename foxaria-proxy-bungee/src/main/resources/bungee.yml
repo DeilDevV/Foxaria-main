@@ -1,0 +1,47 @@
+name: FoxariaProxy
+version: 0.1.0-SNAPSHOT
+main: com.foxaria.proxy.FoxariaProxyPlugin
+author: FoxDesigner
+commands:
+  r:
+    description: Alias for /register
+    usage: /r <password> <repeat>
+  l:
+    description: Alias for /login
+    usage: /l <password>
+  register:
+    description: Register account on proxy
+    usage: /register <password> <repeat> (or /r)
+  login:
+    description: Login on proxy
+    usage: /login <password> (or /l)
+  grantpriv:
+    description: Grant proxy group to online player
+    usage: /grantpriv <player> <group> [seconds]
+  grantpkg:
+    description: Apply proxy store package to online player
+    usage: /grantpkg <player> <packageId>
+  revokepriv:
+    description: Revoke proxy privileges from online player
+    usage: /revokepriv <player> [temp|all]
+  mygroup:
+    description: Show your current proxy group
+    usage: /mygroup
+  groupinfo:
+    description: Show proxy privilege info for player
+    usage: /groupinfo <player>
+  auditpriv:
+    description: Show recent privilege audit for player
+    usage: /auditpriv <player> [limit]
+  restartallbackends:
+    description: Run configured restart commands for all backend servers
+    usage: /restartallbackends
+  proxyhelp:
+    description: Show Foxaria proxy commands
+    usage: /proxyhelp
+  lobby:
+    description: Send player to lobby server
+    usage: /lobby
+  wipe:
+    description: "Управление вайп-блокировкой серверов (только Админ)"
+    usage: /wipe [server]

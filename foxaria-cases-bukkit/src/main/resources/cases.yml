@@ -1,0 +1,65 @@
+# =============================================================================
+# Foxaria Cases — физические кейсы с голограммами и анимацией
+# =============================================================================
+# server-id — имя этого backend в BungeeCord (config.yml Bungee → servers).
+# Должно совпадать с именем сервера в прокси: lobby, test-game и т.д.
+# Награды с target: bungee выполняются в консоли BungeeCord (нужен FoxariaCasesProxy).
+# Награды с target: <server> — в консоли указанного backend.
+# target: current — консоль текущего сервера, где открывают кейс.
+# =============================================================================
+
+settings:
+  server-id: test-game
+  idle-effect-radius: 2.5
+  animation-duration-ticks: 140
+  roulette-items-count: 12
+  hologram-line-spacing: 0.28
+
+cases:
+  donate:
+    display-name: "&6&lДонат кейс"
+    block-item:
+      material: ENDER_CHEST
+      name: "&6&lДонат кейс"
+      lore:
+        - "&7Поставьте блок, чтобы установить кейс"
+        - "&8Foxaria Cases"
+    hologram:
+      offset-y: 1.35
+      lines:
+        - "&6&l✦ Донат кейс ✦"
+        - "&7ПКМ — открыть меню"
+    menu:
+      title: "&6&lДонат кейс"
+      open-button-slot: 22
+      keys-hint-slot: 40
+      buy-keys-lore:
+        - "&7Купить ключи:"
+        - "&e/dshop &7или &bdonate.foxaria.ru"
+    idle-effects:
+      type: spiral
+      particle: END_ROD
+      color: "#FFD700"
+    rewards:
+      vip_7d:
+        display: "&6VIP на 7 дней"
+        weight: 10
+        icon: GOLD_INGOT
+        rarity: legendary
+        menu-lore:
+          - "&7Шанс: &f~10%"
+        commands:
+          - target: bungee
+            run:
+              - "lp user %player% parent addtemp vip 7d"
+      coins_500:
+        display: "&e500 монет"
+        weight: 40
+        icon: GOLD_NUGGET
+        rarity: common
+        menu-lore:
+          - "&7Шанс: &f~40%"
+        commands:
+          - target: current
+            run:
+              - "eco give %player% 500"

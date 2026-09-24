@@ -1,0 +1,173 @@
+# =========================
+# OS / IDE
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# =========================
+# Local Java / JDK / Tools
+# =========================
+.jdks/
+.tools/
+jdk*.zip
+temurin*-jdk*.zip
+*.jmod
+*.dll
+*.exe
+
+# =========================
+# Gradle
+# =========================
+.gradle/
+.gradle-home/
+.gradle-build/
+gradle-home/
+.gradle-cache/
+**/.gradle/
+**/.gradle-home/
+**/.gradle-build/
+
+# Gradle wrapper jar НЕ игнорим
+!gradle/wrapper/gradle-wrapper.jar
+
+# =========================
+# Build output
+# =========================
+build/
+**/build/
+bin/
+**/bin/
+out/
+target/
+
+*.class
+*.war
+*.ear
+
+# Если какой-то jar реально нужен в репе — добавляй исключением:
+# !path/to/file.jar
+
+# =========================
+# Logs
+# =========================
+*.log
+*.log.gz
+logs/
+**/logs/
+
+# =========================
+# Minecraft / Paper / Spigot / Bungee runtime
+# =========================
+server.properties
+**/server.properties
+
+banned-ips.json
+banned-players.json
+ops.json
+usercache.json
+whitelist.json
+
+eula.txt
+
+world/
+world_nether/
+world_the_end/
+**/world/
+**/world_nether/
+**/world_the_end/
+
+*.mca
+
+plugins/.paper-remapped/
+**/plugins/.paper-remapped/
+.paper-remapped/
+**/.paper-remapped/
+
+crash-reports/
+**/crash-reports/
+
+cache/
+**/cache/
+
+versions/
+libraries/
+**/versions/
+**/libraries/
+
+# =========================
+# Minecraft plugin runtime data
+# =========================
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+plugins/*/data/
+**/plugins/*/data/
+
+plugins/*/cache/
+**/plugins/*/cache/
+
+# =========================
+# Proxy / Bungee / Velocity local files
+# =========================
+proxy.log.*
+*.lck
+
+proxy-bungeecord/config.yml
+proxy-bungeecord/plugins/*/*.db
+proxy-bungeecord/plugins/*/*.db-shm
+proxy-bungeecord/plugins/*/*.db-wal
+
+velocity.toml
+forwarding.secret
+
+# =========================
+# Generated dumps / local scripts output
+# =========================
+scripts/generated/
+*.sql
+*.dump
+
+*.key
+*.pem
+*.crt
+*.p12
+*.jks
+
+# =========================
+# Markdown notes
+# =========================
+*.md
+!README.md
+!LICENSE.md
+
+# =========================
+# Temp files
+# =========================
+tmp/
+temp/
+*.tmp
+*.bak
+*.old
+*.swp
+*.swo
+
+# =========================
+# Node / Web
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.next/
+dist/

@@ -1,0 +1,66 @@
+groups:
+  default:
+    prefix: "&7"
+    permissions:
+      - foxaria.spawn
+      - foxaria.rtp
+      - foxaria.home
+      - foxaria.tpa
+      - foxaria.economy.balance
+      - foxaria.economy.pay
+      - foxaria.kits.use.starter
+      - foxaria.shop.use
+      - foxaria.auction.use
+      - foxaria.rewards.use
+      - foxaria.voteclaim.use
+      - foxaria.refer.use
+      - foxaria.season.use
+      - foxaria.customitems.use
+  supporter:
+    inherits:
+      - default
+    prefix: "&a[Поддержка] "
+    permissions:
+      - foxaria.kits.use.daily
+  vip:
+    inherits:
+      - supporter
+    prefix: "&6[VIP] "
+    permissions:
+      - foxaria.kits.use.vip
+  helper:
+    inherits:
+      - default
+    prefix: "&9[Хелпер] "
+    permissions:
+      - foxaria.mod.warn
+      - foxaria.mod.history
+      - foxaria.mod.note
+      - foxaria.mod.staffchat
+  moderator:
+    inherits:
+      - helper
+    prefix: "&b[Мод] "
+    permissions:
+      - foxaria.mod.mute
+      - foxaria.mod.ban
+      - foxaria.mod.freeze
+      - foxaria.mod.socialspy
+      - foxaria.mod.commandspy
+      - foxaria.mod.invsee
+      - foxaria.mod.echest
+      - foxaria.mod.vanish
+      - foxaria.mod.vanish.see
+      - foxaria.admin.auditlog
+  admin:
+    inherits:
+      - moderator
+    prefix: "&c[Админ] "
+    permissions:
+      - foxaria.admin.panel
+      - foxaria.admin.maintenance
+      - foxaria.admin.restart
+      - foxaria.ranks.manage
+      - foxaria.economy.admin
+      - foxaria.security.admin
+      - foxaria.customitems.admin

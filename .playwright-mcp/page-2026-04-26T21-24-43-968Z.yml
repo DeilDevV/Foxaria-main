@@ -1,0 +1,174 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e6]:
+      - link "F FOXARIA" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e10]: F
+        - generic [ref=e11]: FOXARIA
+      - generic [ref=e12]:
+        - link "Новости" [ref=e13] [cursor=pointer]:
+          - /url: /news
+          - img [ref=e14]
+          - text: Новости
+        - link "Магазин" [ref=e17] [cursor=pointer]:
+          - /url: /shop
+          - img [ref=e18]
+          - text: Магазин
+        - link "Бан-лист" [ref=e21] [cursor=pointer]:
+          - /url: /bans
+          - img [ref=e22]
+          - text: Бан-лист
+        - link "Состав" [ref=e24] [cursor=pointer]:
+          - /url: /staff
+          - img [ref=e25]
+          - text: Состав
+        - link "Вайпы" [ref=e30] [cursor=pointer]:
+          - /url: /wipes
+          - img [ref=e31]
+          - text: Вайпы
+      - button "Deil Deil admin" [ref=e35] [cursor=pointer]:
+        - img "Deil" [ref=e36]
+        - generic [ref=e37]:
+          - paragraph [ref=e38]: Deil
+          - paragraph [ref=e39]: admin
+        - img [ref=e40]
+  - main [ref=e42]:
+    - generic [ref=e43]:
+      - generic [ref=e45]:
+        - generic [ref=e48]: Серверы запускаются...
+        - heading "FOXARIA" [level=1] [ref=e49]
+        - paragraph [ref=e50]: 💀 Анархия без правил
+        - paragraph [ref=e51]:
+          - text: Выживай. Сражайся. Доминируй.
+          - text: Minecraft-анархия нового поколения.
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - paragraph [ref=e55]: IP сервера
+            - paragraph [ref=e56]: play.foxaria.ru
+          - button "Копировать" [ref=e57] [cursor=pointer]:
+            - img [ref=e58]
+            - text: Копировать
+        - generic [ref=e61]:
+          - link "Магазин доната" [ref=e62] [cursor=pointer]:
+            - /url: /shop
+            - generic [ref=e63]:
+              - img [ref=e64]
+              - text: Магазин доната
+          - link "Мой профиль" [ref=e67] [cursor=pointer]:
+            - /url: /profile
+            - generic [ref=e68]:
+              - img [ref=e69]
+              - text: Мой профиль
+      - generic [ref=e74]:
+        - generic [ref=e75]:
+          - heading "Почему Foxaria?" [level=2] [ref=e76]
+          - paragraph [ref=e77]: Настоящая анархия — без ограничений и компромиссов
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - img [ref=e81]
+            - heading "Полная Анархия" [level=3] [ref=e87]
+            - paragraph [ref=e88]: Никаких правил. Убивай, грифь, строй — всё в твоих руках
+          - generic [ref=e89]:
+            - img [ref=e91]
+            - heading "PvP без ограничений" [level=3] [ref=e100]
+            - paragraph [ref=e101]: Сражайся с любым игроком в любом месте — только сила решает всё
+          - generic [ref=e102]:
+            - img [ref=e104]
+            - heading "Приваты" [level=3] [ref=e106]
+            - paragraph [ref=e107]: Защити своё имущество с помощью системы приватов на территории
+          - generic [ref=e108]:
+            - img [ref=e110]
+            - heading "Гильдии" [level=3] [ref=e115]
+            - paragraph [ref=e116]: Объединяйся с союзниками в гильдию и доминируй на сервере
+          - generic [ref=e117]:
+            - img [ref=e119]
+            - heading "Огромный мир" [level=3] [ref=e121]
+            - paragraph [ref=e122]: Исследуй бескрайний мир, строй базы и скрывайся от врагов
+          - generic [ref=e123]:
+            - img [ref=e125]
+            - heading "Прокачка" [level=3] [ref=e128]
+            - paragraph [ref=e129]: Развивай персонажа, зарабатывай монеты и повышай свой уровень
+      - generic [ref=e133]:
+        - generic [ref=e134]: 💀
+        - heading "Готов к анархии?" [level=2] [ref=e135]
+        - paragraph [ref=e136]: Заходи прямо сейчас. Никаких правил, никаких ограничений. Только ты и жестокий мир Foxaria.
+        - generic [ref=e137]:
+          - link "Поддержать проект" [ref=e138] [cursor=pointer]:
+            - /url: /shop
+            - generic [ref=e139]:
+              - img [ref=e140]
+              - text: Поддержать проект
+          - link "Читать новости" [ref=e143] [cursor=pointer]:
+            - /url: /news
+            - generic [ref=e144]:
+              - img [ref=e145]
+              - text: Читать новости
+  - contentinfo [ref=e148]:
+    - generic [ref=e149]:
+      - generic [ref=e150]:
+        - generic [ref=e151]:
+          - generic [ref=e152]:
+            - generic [ref=e153]: F
+            - generic [ref=e154]: FOXARIA
+          - paragraph [ref=e155]: "Minecraft-анархия Foxaria: PvP, гильдии, приваты и честная экономика."
+          - generic [ref=e156]:
+            - link "VK" [ref=e157] [cursor=pointer]:
+              - /url: "#"
+            - link "DC" [ref=e158] [cursor=pointer]:
+              - /url: "#"
+            - link "TG" [ref=e159] [cursor=pointer]:
+              - /url: "#"
+        - generic [ref=e160]:
+          - heading "Навигация" [level=3] [ref=e161]
+          - list [ref=e162]:
+            - listitem [ref=e163]:
+              - link "Новости" [ref=e164] [cursor=pointer]:
+                - /url: /news
+                - img [ref=e165]
+                - text: Новости
+            - listitem [ref=e168]:
+              - link "Магазин" [ref=e169] [cursor=pointer]:
+                - /url: /shop
+                - img [ref=e170]
+                - text: Магазин
+            - listitem [ref=e173]:
+              - link "Бан-лист" [ref=e174] [cursor=pointer]:
+                - /url: /bans
+                - img [ref=e175]
+                - text: Бан-лист
+            - listitem [ref=e177]:
+              - link "Состав" [ref=e178] [cursor=pointer]:
+                - /url: /staff
+                - img [ref=e179]
+                - text: Состав
+            - listitem [ref=e184]:
+              - link "Вайпы" [ref=e185] [cursor=pointer]:
+                - /url: /wipes
+                - img [ref=e186]
+                - text: Вайпы
+        - generic [ref=e188]:
+          - heading "Серверы" [level=3] [ref=e189]
+          - generic [ref=e190]:
+            - generic [ref=e191]: Анархия (основной режим)
+            - generic [ref=e193]: Лобби и сеть BungeeCord
+          - generic [ref=e195]:
+            - paragraph [ref=e196]: IP адрес
+            - paragraph [ref=e197]: play.foxaria.ru
+        - generic [ref=e198]:
+          - heading "Информация" [level=3] [ref=e199]
+          - list [ref=e200]:
+            - listitem [ref=e201]:
+              - link "Правила сервера" [ref=e202] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e203]:
+              - link "Пользовательское соглашение" [ref=e204] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e205]:
+              - link "Политика возврата" [ref=e206] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e207]:
+              - link "Поддержка" [ref=e208] [cursor=pointer]:
+                - /url: "#"
+      - generic [ref=e210]:
+        - paragraph [ref=e211]: © 2026 Foxaria. Все права защищены.
+        - paragraph [ref=e212]: Minecraft — торговая марка Mojang Studios. Не связан с Mojang.

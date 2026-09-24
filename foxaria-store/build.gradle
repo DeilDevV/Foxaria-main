@@ -1,0 +1,6 @@
+description = 'Foxaria Tebex/store fulfillment hooks'
+
+dependencies {
+    implementation project(':foxaria-core')
+    implementation 'com.google.code.gson:gson:2.11.0'
+}

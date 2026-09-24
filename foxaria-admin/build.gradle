@@ -1,0 +1,6 @@
+description = 'Foxaria admin panel'
+
+dependencies {
+    implementation project(':foxaria-core')
+    implementation project(':foxaria-moderation')
+}

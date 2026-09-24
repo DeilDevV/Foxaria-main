@@ -1,0 +1,13 @@
+package com.foxaria.auth;
+
+public enum AuthResult {
+    SUCCESS,
+    ALREADY_AUTHENTICATED,
+    ALREADY_REGISTERED,
+    NOT_REGISTERED,
+    PASSWORD_MISMATCH,
+    PASSWORD_TOO_SHORT,
+    PASSWORD_TOO_LONG,
+    INVALID_PASSWORD,
+    ERROR
+}

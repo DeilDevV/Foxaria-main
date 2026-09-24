@@ -1,0 +1,49 @@
+# Лобби: staff-panels.enabled: false и register-commands: false — команды «глухие», без таба.
+# Игровой сервер: enabled: true (по умолчанию в коде тоже true, если ключа нет).
+# Ванильный /ban-ip: отключайте в commands.yml сервера (Paper: aliases ban-ip: []). IP-бан как правило — отдельная причина в каталоге /punish (например код 5.1).
+staff-panels:
+  enabled: true
+  register-commands: true
+
+anti-spam:
+  message-window-seconds: 4
+  max-identical-messages: 3
+  max-messages-per-window: 6
+chat-filter:
+  enabled: true
+  min-caps-length: 12
+  max-caps-ratio: 0.75
+  blocked-phrases:
+    - "discord.gg/freeop"
+    - "ez hacked"
+anti-bot:
+  enabled: true
+  min-join-interval-millis: 500
+  burst-window-millis: 10000
+  max-joins-per-window: 3
+  kick-message: "&cСлишком много подключений. Попробуйте снова через несколько секунд."
+staff-tools:
+  vanish-default: false
+  socialspy-default: false
+  commandspy-default: false
+frozen-allowed-commands:
+  - "msg"
+  - "tell"
+  - "w"
+  - "r"
+punishments:
+  screen:
+    message: "&6&lFOXARIA\n%block_notice%\n&cПричина: &f%reason_title%\n&7%reason_description%\n&eСрок: &f%expires%\n&cВыдал: &f%actor%"
+  reasons:
+    "1.1":
+      type: TEMPBAN
+      duration-seconds: 604800
+      title: "Читы"
+      description: "Использование стороннего ПО, дающего преимущество в игре."
+      rules-text: "Читы, X-Ray, автокликеры, трейнеры и другое стороннее ПО."
+    "2.1":
+      type: TEMPMUTE
+      duration-seconds: 7200
+      title: "Оскорбления"
+      description: "Оскорбительное поведение, токсичность и провокации в чате."
+      rules-text: "Оскорбления игроков, администрации, провокации и токсичное общение."

@@ -1,0 +1,72 @@
+void-world:
+  time: 6000
+
+auth:
+  world: auth_void
+  spawn:
+    world: auth_void
+    x: 0.5
+    y: 100.0
+    z: 0.5
+    yaw: 0.0
+    pitch: 0.0
+
+selector:
+  world: selector_void
+  spawn:
+    world: selector_void
+    x: 0.5
+    y: 65.0
+    z: 0.5
+    yaw: 0.0
+    pitch: 0.0
+  auto-open-delay-ticks: 15
+  menu-title: "&6Выбор сервера"
+  title:
+    title: "&6Выбор сервера"
+    subtitle: "&fВыберите режим для входа"
+  actionbar: "&eВыберите сервер для входа."
+  actionbar-open: "&6Открыто меню выбора сервера."
+  allowed-commands:
+    - server
+    - menu
+  platform:
+    y: 64
+    radius: 4
+    material: SMOOTH_STONE
+    border-material: GLASS
+  item:
+    enabled: true
+    slot: 4
+    material: NETHER_STAR
+    name: "&6Выбор сервера"
+    lore:
+      - "&7Нажмите, чтобы открыть меню"
+      - "&7и перейти на основной сервер"
+
+main:
+  world: world
+  title:
+    title: "&aОсновной сервер"
+    subtitle: "&fДобро пожаловать на Foxaria"
+  actionbar: "&aВы вошли на основной сервер."
+
+destinations:
+  semi-anarchy:
+    enabled: true
+    name: "&6Полуанархия"
+    material: NETHERITE_SWORD
+    slot: 13
+    description:
+      - "&7Основной мир проекта Foxaria"
+      - "&7PvP, grief и долгий вайп-цикл"
+      - "&aНажмите, чтобы войти"
+    world: world
+    use-last-location: true
+    spawn:
+      world: world
+      x: 0.5
+      y: 100.0
+      z: 0.5
+      yaw: 0.0
+      pitch: 0.0

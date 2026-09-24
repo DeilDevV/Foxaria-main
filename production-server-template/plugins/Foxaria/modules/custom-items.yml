@@ -1,0 +1,66 @@
+rarities:
+  common:
+    color: "&7"
+  rare:
+    color: "&9"
+  epic:
+    color: "&5"
+  legendary:
+    color: "&6"
+reward-items:
+  token-item-type: token
+  token-material: SUNFLOWER
+  crate-key-prefix: crate_key
+  claim-item-material: AMETHYST_SHARD
+claim-rewards:
+  founder_pass:
+    display: "&dКупон награды основателя"
+    rarity: legendary
+    lore:
+      - "&7Нажмите ПКМ, чтобы забрать один раз на игрока."
+      - "&8Привязано к системе наград Foxaria."
+    action: "coins:250"
+crates:
+  vote:
+    display: "&aКейс за голосование"
+    key-name: "&aКлюч от кейса голосования"
+    rewards:
+      coins_50:
+        display: "&e50 монет"
+        rarity: common
+        weight: 50
+        action: "coins:50"
+      tokens_3:
+        display: "&6Набор токенов x3"
+        rarity: rare
+        weight: 25
+        action: "tokens:3"
+      vote_key_bonus:
+        display: "&bБонусный ключ голосования"
+        rarity: epic
+        weight: 15
+        action: "key:vote:1"
+      founder_pass:
+        display: "&dКупон награды основателя"
+        rarity: legendary
+        weight: 10
+        action: "one_time:founder_pass"
+  blackmarket:
+    display: "&5Тайник чёрного рынка"
+    key-name: "&5Ключ чёрного рынка"
+    rewards:
+      coins_150:
+        display: "&6150 монет"
+        rarity: rare
+        weight: 45
+        action: "coins:150"
+      tokens_8:
+        display: "&6Набор токенов x8"
+        rarity: epic
+        weight: 35
+        action: "tokens:8"
+      broadcast:
+        display: "&dГромкое оповещение на сервер"
+        rarity: legendary
+        weight: 20
+        action: "command:say %player% выбил награду чёрного рынка на Foxaria!"

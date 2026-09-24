@@ -1,0 +1,5 @@
+description = 'Foxaria moderation stack'
+
+dependencies {
+    implementation project(':foxaria-core')
+}

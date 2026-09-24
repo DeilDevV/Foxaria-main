@@ -1,0 +1,10 @@
+description = 'Foxaria custom workbench crafts'
+
+dependencies {
+    implementation project(':foxaria-api')
+    implementation project(':foxaria-core')
+    implementation project(':foxaria-item-templates')
+    implementation project(':foxaria-shop')
+    implementation project(':foxaria-regions')
+    implementation 'com.google.code.gson:gson:2.11.0'
+}

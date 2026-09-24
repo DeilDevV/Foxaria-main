@@ -1,0 +1,5 @@
+description = 'Foxaria custom items framework'
+
+dependencies {
+    implementation project(':foxaria-core')
+}

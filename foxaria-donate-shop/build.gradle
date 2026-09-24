@@ -1,0 +1,5 @@
+description = 'Foxaria donate token shop'
+
+dependencies {
+    implementation project(':foxaria-core')
+}

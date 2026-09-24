@@ -1,0 +1,12 @@
+name: FoxariaHubGuard
+version: 0.1.0-SNAPSHOT
+main: com.foxaria.hubguard.FoxariaHubGuardPlugin
+api-version: "1.21.11"
+author: Fox Designer
+commands:
+  help:
+    description: "Foxaria help"
+  lobbyhelp:
+    description: "Foxaria lobby/auth help"
+  wipe:
+    description: "Управление вайп-блокировкой серверов (только Админ)"

@@ -1,0 +1,5 @@
+description = 'Foxaria security hooks'
+
+dependencies {
+    implementation project(':foxaria-core')
+}

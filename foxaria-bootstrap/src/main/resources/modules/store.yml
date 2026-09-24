@@ -1,0 +1,20 @@
+enabled: true
+processing-interval-ticks: 100
+batch-size: 10
+tebex-queue:
+  enabled: false
+  base-url: "https://plugin.tebex.io"
+  secret: ""
+packages:
+  supporter_rank:
+    action: "rank:supporter"
+    revoke-action: "remove_rank:supporter"
+  vip_30d:
+    action: "subscription:vip:2592000"
+    revoke-action: "remove_rank:vip"
+  coins_500:
+    action: "coins:500"
+    revoke-action: "take_coins:500"
+  announce_purchase:
+    action: "command:say Спасибо %player% за поддержку Foxaria!"
+    revoke-action: "command:say Для %player% был выполнен откат покупки."

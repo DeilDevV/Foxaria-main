@@ -1,0 +1,5 @@
+description = 'Foxaria server shop'
+
+dependencies {
+    implementation project(':foxaria-core')
+}

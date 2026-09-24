@@ -1,0 +1,136 @@
+mode: auth
+
+# РЈР±СЂР°С‚СЊ Р¶С‘Р»С‚С‹Рµ В«N Р·Р°С€С‘Р» / РІС‹С€РµР»В» (РєР°Рє РЅР° РёРіСЂРѕРІРѕРј Foxaria)
+messages:
+  hide-vanilla-join-quit: true
+
+# РўРѕС‡РєР° РґР»СЏ auth (spectator): y: -1 = РІР·СЏС‚СЊ min( y-max-fallback, РІС‹СЃРѕС‚Р°_РјРёСЂР° - 2 )
+auth:
+  spawn:
+    enabled: true
+    world: auth_void
+    x: 0.5
+    y: -1
+    y-max-fallback: 320.0
+    z: 0.5
+    yaw: 0.0
+    pitch: 0.0
+
+# РњРµРЅСЋ СЃРµСЂРІРµСЂРѕРІ (С‚РѕР»СЊРєРѕ Р»РѕР±Р±Рё): РєРѕРјРїР°СЃ, BungeeCord Connect. РќР° РёРіСЂРѕРІРѕРј СѓР·Р»Рµ РѕС‚РєР»СЋС‡Рё mode=lobby.
+lobby-menu:
+  enabled: true
+  # РўРёРєРё РґРѕ РїРѕРґСЃС‚Р°РЅРѕРІРєРё В«?В», РµСЃР»Рё Bungee РЅРµ РѕС‚РІРµС‚РёР» РЅР° PlayerCount (РѕРґРёРЅРѕС‡РЅС‹Р№ РјРёСЂ Р±РµР· РїСЂРѕРєСЃРё)
+  player-count-timeout-ticks: 45
+  # РРЅС‚РµСЂРІР°Р» TCP-РїРёРЅРіР° Р±СЌРєРµРЅРґРѕРІ (СЃРµРєСѓРЅРґС‹). 0 вЂ” РѕС‚РєР»СЋС‡РёС‚СЊ РїСЂРѕРІРµСЂРєСѓ.
+  server-probe-interval-seconds: 8
+  # Host РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РґР»СЏ server-РїРёРЅРіР° (РєРѕРіРґР° address Р·Р°РґР°РЅ РєР°Рє ":25568" РёР»Рё "{host}:25568").
+  # РЈРґРѕР±РЅРѕ, РµСЃР»Рё РІС‹ РјРµРЅСЏРµС‚Рµ РІРЅРµС€РЅРёР№ IP РґР»СЏ РїРѕРґРєР»СЋС‡РµРЅРёСЏ РёРіСЂРѕРєРѕРІ: Р±СЌРєРµРЅРґС‹ РїРѕС‡С‚Рё РІСЃРµРіРґР° РѕСЃС‚Р°СЋС‚СЃСЏ 127.0.0.1.
+  server-probe-default-host: "127.0.0.1"
+  # РўРµРєСЃС‚ РІ Р»РѕСЂРµ, РєРѕРіРґР° РѕС‡РµСЂРµРґРё РЅРµС‚ (0 РІ РѕС‡РµСЂРµРґРё РЅР° РїСЂРѕРєСЃРё)
+  queue-none-text: "РЅРµС‚"
+  no-damage: true
+  no-food-loss: true
+  lock-compass: true
+  compass-slot: 4
+  compass-name: "&#FF9900&lРЎРµСЂРІРµСЂС‹ Foxaria"
+  compass-lore:
+    - "&7Р’С‹Р±РѕСЂ РјРёСЂР° СЃРµС‚Рё"
+    - "&8РџРљРњ СЃ РєРѕРјРїР°СЃРѕРј РІ СЂСѓРєРµ"
+  gui-title: "&#FF8800&lРЎРµСЂРІРµСЂС‹ Foxaria"
+  # РџСѓСЃС‚С‹Рµ СЃР»РѕС‚С‹ Р·Р°РїРѕР»РЅСЏСЋС‚СЃСЏ СЃС‚РµРєР»РѕРј; РїРѕРґСЃРєР°Р·РєР° РІРЅРёР·Сѓ вЂ” РѕС‚РґРµР»СЊРЅС‹Р№ РїСЂРµРґРјРµС‚
+  filler-material: GRAY_STAINED_GLASS_PANE
+  footer-help:
+    enabled: true
+    slot: 22
+    material: BOOK
+    name: "&6&lРџРѕРґСЃРєР°Р·РєРё Р»РѕР±Р±Рё"
+    lore:
+      - "&7РљРѕРјР°РЅРґС‹ Foxaria РІ Р»РѕР±Р±Рё:"
+      - "&e/lobby &8вЂ” &7РІРµСЂРЅСѓС‚СЊСЃСЏ СЃСЋРґР° РёР· РёРіСЂС‹"
+      - "&e/menu &8вЂ” &7РјРµРЅСЋ СЃРµСЂРІРµСЂРѕРІ (РёР»Рё РєРѕРјРїР°СЃ РџРљРњ)"
+      - "&e/server &f<РёРјСЏ> &8вЂ” &7РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє РјРёСЂСѓ"
+      - "&e/help &8вЂ” &7СЃРїРёСЃРѕРє РєРѕРјР°РЅРґ"
+  servers:
+    soon_left:
+      slot: 11
+      coming-soon: true
+      soon-material: GRAY_CONCRETE
+      name: "&7РЎРєРѕСЂРѕ"
+      lore:
+        - "&8Р РµР¶РёРј РІ СЂР°Р·СЂР°Р±РѕС‚РєРµ"
+    anarch:
+      slot: 13
+      coming-soon: false
+      material: NETHERITE_SWORD
+      bungee-server: test-game
+      # РђРґСЂРµСЃ Р±СЌРєРµРЅРґ-СЃРµСЂРІРµСЂР° РґР»СЏ TCP-РїРёРЅРіР° СЃС‚Р°С‚СѓСЃР° (host:port)
+      # РњРѕР¶РЅРѕ СѓРєР°Р·Р°С‚СЊ ":25568" (host РІРѕР·СЊРјС‘С‚СЃСЏ РёР· server-probe-default-host)
+      address: ":25568"
+      max-slots: 200
+      # РљСЂР°СЃРЅС‹Р№ СЃРІРµС‚Р»С‹Р№ РіСЂР°РґРёРµРЅС‚; РµСЃР»Рё РїСѓСЃС‚Рѕ вЂ” РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ name
+      name-gradient-red: "РђРЅР°СЂС…РёСЏ"
+      name: "&c&lРђРЅР°СЂС…РёСЏ"
+      lore:
+        - "&7РљР»Р°СЃСЃРёС‡РµСЃРєР°СЏ Р°РЅР°СЂС…РёСЏ: РІС‹Р¶РёРІР°РЅРёРµ Р±РµР· РїСЂР°РІРёР» Рё Р·Р°РїСЂРµС‚РѕРІ."
+        - "&7РџРѕР»РЅС‹Р№ СЃРІРѕР±РѕРґРЅС‹Р№ PvP РІ РѕС‚РєСЂС‹С‚РѕРј РјРёСЂРµ вЂ” РЅР°РїР°РґР°Р№ Рё Р·Р°С‰РёС‰Р°Р№ Р±Р°Р·Сѓ."
+        - "&7Р РµР№РґС‹ С‡СѓР¶РёС… РґРѕРјРѕРІ, РІР·СЂС‹РІС‹, РєСЂР°Р¶Р° СЂРµСЃСѓСЂСЃРѕРІ вЂ” РІСЃС‘ СЂР°Р·СЂРµС€РµРЅРѕ."
+        - "&7Р“РёР»СЊРґРёРё, СЌРєРѕРЅРѕРјРёРєР° РёРіСЂРѕРєРѕРІ, С‚РѕСЂРіРѕРІР»СЏ Рё РІРѕР№РЅС‹ Р·Р° С‚РµСЂСЂРёС‚РѕСЂРёРё."
+        - "&8Р”Р»СЏ С‚РµС…, РєС‚Рѕ С…РѕС‡РµС‚ С…Р°СЂРґРєРѕСЂ Рё РїРѕР»РЅС‹Р№ С…Р°РѕСЃ."
+    soon_right:
+      slot: 15
+      coming-soon: true
+      soon-material: GRAY_CONCRETE
+      name: "&7РЎРєРѕСЂРѕ"
+      lore:
+        - "&8Р РµР¶РёРј РІ СЂР°Р·СЂР°Р±РѕС‚РєРµ"
+
+# РџСЂРµС„РёРєСЃ РґРѕРЅР°С‚Р°/СЂР°РЅРіР° РІ С‡Р°С‚Рµ (SQLite FoxariaProxy + С‚Рµ Р¶Рµ РіСЂСѓРїРїС‹, С‡С‚Рѕ РІ plugins/FoxariaProxy/config.yml)
+rank-bridge:
+  enabled: true
+  type: mysql
+  jdbc-url: ""
+  host: 127.0.0.1
+  port: 3306
+  name: foxaria
+  username: foxaria
+  password: Grnkbq2GS7rBj71TWmx
+  # РџСѓС‚СЊ Рє foxaria-proxy.db: РїСЂРѕР±СѓСЋС‚СЃСЏ sqlite-file Рё sqlite-extra-paths РѕС‚ РєРѕСЂРЅСЏ СЃРµСЂРІРµСЂР° (РїР°РїРєР° СЃ spigot.yml) Рё РѕС‚ РїР°РїРєРё РїР»Р°РіРёРЅР°
+  sqlite-file: "plugins/FoxariaProxy/foxaria-proxy.db"
+  sqlite-extra-paths:
+    - "../../proxy-bungeecord/plugins/FoxariaProxy/foxaria-proxy.db"
+  # Р РµР·РµСЂРІ РїСЂРё РѕС‚СЃСѓС‚СЃС‚РІРёРё СЃРёРЅС…СЂРѕРЅРёР·Р°С†РёРё СЃ РїСЂРѕРєСЃРё; РЅРµ РІРєР»СЋС‡Р°Р№ Р±РµР· РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё (РјРѕР¶РµС‚ РїРѕСЂС‚РёС‚СЊ СЃС‚СЂРѕРєРё).
+  normalize-mojibake-prefix: false
+  table: proxy_privileges
+  fallback-group: default
+  # Groups that are treated as admins for wipe bypass and admin checks
+  admin-groups:
+    - admin
+    - headadmin
+    - co-owner
+    - coadmin
+    - owner
+  groups:
+    default:
+      prefix: "&7РРіСЂРѕРє &8| &f"
+    vip:
+      prefix: "&6VIP &8| &f"
+    elite:
+      prefix: "&bР­Р»РёС‚Р° &8| &f"
+    admin:
+      prefix: "&cРђРґРјРёРЅ &8| &f"
+
+help:
+  header: "&6&lFOXARIA &8В» &fР”РѕСЃС‚СѓРїРЅС‹Рµ РєРѕРјР°РЅРґС‹"
+  player-lines:
+    - "&e/server &7- РІС‹Р±СЂР°С‚СЊ СЃРµСЂРІРµСЂ"
+    - "&e/menu &7- РѕСЃРЅРѕРІРЅРѕРµ РјРµРЅСЋ"
+  admin-lines:
+    - "&c/op-РєРѕРјР°РЅРґС‹ РґРѕСЃС‚СѓРїРЅС‹ С‚РѕР»СЊРєРѕ Р°РґРјРёРЅР°Рј"
+
+restrictions:
+  block-place-break: true
+  block-interact: true
+  inventory-interact: true
+  drop-pickup: true
+  pvp: true
+  force-gamemode-adventure: true

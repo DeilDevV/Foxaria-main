@@ -1,0 +1,24 @@
+# Обычный лот: material + amount.
+# Особый предмет (зелья, чары, кастом): сначала /itemtemplate save <id>, затем:
+#   item-template: "my_id"
+#   material: PAPER   # иконка в меню, если шаблон не загрузился
+#   amount: 1         # сколько копий шаблона выдать за покупку
+offers:
+  iron_pack:
+    display: "Пак железа x16"
+    material: IRON_INGOT
+    amount: 16
+    price-coins: 60
+    required-tier: 1
+  gold_pack:
+    display: "Пак золота x8"
+    material: GOLD_INGOT
+    amount: 8
+    price-coins: 90
+    required-tier: 2
+  diamond_pack:
+    display: "Пак алмазов x4"
+    material: DIAMOND
+    amount: 4
+    price-coins: 160
+    required-tier: 3

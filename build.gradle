@@ -1,0 +1,241 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:8.3.3'
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+group = 'com.foxaria'
+version = '0.1.0-SNAPSHOT'
+
+ext {
+    paperVersion = '1.21.11-R0.1-SNAPSHOT'
+    luckPermsVersion = '5.4'
+    vaultVersion = '1.7.1'
+    hikariVersion = '5.1.0'
+    sqliteVersion = '3.46.1.3'
+    mysqlVersion = '9.1.0'
+    postgresVersion = '42.7.4'
+}
+
+allprojects {
+    group = rootProject.group
+    version = rootProject.version
+
+    repositories {
+        mavenCentral()
+        maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+        maven { url = 'https://repo.lucko.me/' }
+        maven { url = 'https://jitpack.io' }
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    // Avoid Windows/AV/OneDrive locking issues inside per-module /build directories.
+    // Keep all outputs under a single root folder.
+    buildDir = file("$rootDir/.gradle-build/${project.name}")
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+        withSourcesJar()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release = 21
+    }
+
+    dependencies {
+        // Прокси Bungee не компилируем с Paper API / LP-Spigot / Vault — только BungeeCord.jar.
+        if (project.name != 'foxaria-proxy-bungee') {
+            compileOnly "io.papermc.paper:paper-api:${paperVersion}"
+            compileOnly "net.luckperms:api:${luckPermsVersion}"
+            compileOnly "com.github.MilkBowl:VaultAPI:${vaultVersion}"
+        }
+    }
+}
+
+project(':foxaria-api') {
+    dependencies {
+        api "io.papermc.paper:paper-api:${paperVersion}"
+        api "net.luckperms:api:${luckPermsVersion}"
+        api "com.github.MilkBowl:VaultAPI:${vaultVersion}"
+    }
+}
+
+configure(subprojects.findAll {
+    it.name != 'foxaria-api' && it.name != 'foxaria-bootstrap' && it.name != 'foxaria-proxy-bungee'
+}) {
+    dependencies {
+        implementation project(':foxaria-api')
+    }
+}
+
+project(':foxaria-core') {
+    dependencies {
+        implementation "com.zaxxer:HikariCP:${hikariVersion}"
+        implementation "org.xerial:sqlite-jdbc:${sqliteVersion}"
+        implementation "com.mysql:mysql-connector-j:${mysqlVersion}"
+        implementation "org.postgresql:postgresql:${postgresVersion}"
+    }
+}
+
+project(':foxaria-bootstrap') {
+    apply plugin: 'com.gradleup.shadow'
+
+    dependencies {
+        implementation project(':foxaria-api')
+        implementation project(':foxaria-core')
+        implementation project(':foxaria-economy')
+        implementation project(':foxaria-kits')
+        implementation project(':foxaria-shop')
+        implementation project(':foxaria-donate-shop')
+        implementation project(':foxaria-auction')
+        implementation project(':foxaria-store')
+        implementation project(':foxaria-moderation')
+        implementation project(':foxaria-admin')
+        implementation project(':foxaria-security')
+        implementation project(':foxaria-custom-items')
+        implementation project(':foxaria-retention')
+        implementation project(':foxaria-item-templates')
+        implementation project(':foxaria-regions')
+        implementation project(':foxaria-guilds')
+        implementation project(':foxaria-crafting')
+        implementation project(':foxaria-modern-furnace')
+        implementation project(':foxaria-ranks')
+    }
+
+    tasks.named('build') {
+        dependsOn tasks.named('shadowJar')
+    }
+
+    tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+        archiveClassifier.set('')
+        mergeServiceFiles()
+        // Auto-deploy shadow JAR to all game server plugin directories after every build.
+        // Removes stale individual module JARs first to prevent Paper from failing to load.
+        doLast {
+            ["$rootDir/test-server/plugins", "$rootDir/production-server-template/plugins"].each { dir ->
+                fileTree(dir).matching { include 'foxaria-*.jar', 'Foxaria.jar' }.each { it.delete() }
+                copy {
+                    from archiveFile
+                    into dir
+                    rename { 'Foxaria.jar' }
+                }
+            }
+        }
+    }
+}
+
+project(':foxaria-proxy-bungee') {
+    apply plugin: 'com.gradleup.shadow'
+    dependencies {
+        compileOnly files("$rootDir/proxy-bungeecord/BungeeCord.jar")
+        implementation "org.xerial:sqlite-jdbc:${sqliteVersion}"
+        implementation "com.mysql:mysql-connector-j:${mysqlVersion}"
+        implementation "org.postgresql:postgresql:${postgresVersion}"
+    }
+
+    tasks.named('build') {
+        dependsOn tasks.named('shadowJar')
+    }
+
+    tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+        archiveClassifier.set('')
+        mergeServiceFiles()
+        doLast {
+            copy {
+                from archiveFile
+                into "$rootDir/proxy-bungeecord/plugins"
+                rename { 'FoxariaProxy.jar' }
+            }
+        }
+    }
+}
+
+project(':foxaria-cases-bukkit') {
+    apply plugin: 'com.gradleup.shadow'
+
+    dependencies {
+        implementation project(':foxaria-cases')
+        implementation project(':foxaria-core')
+    }
+
+    tasks.named('build') {
+        dependsOn tasks.named('shadowJar')
+    }
+
+    tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+        archiveClassifier.set('')
+        mergeServiceFiles()
+        doLast {
+            ["$rootDir/test-server/plugins", "$rootDir/production-server-template/plugins", "$rootDir/lobby-server/plugins"].each { dir ->
+                copy {
+                    from archiveFile
+                    into dir
+                    rename { 'FoxariaCases.jar' }
+                }
+            }
+        }
+    }
+}
+
+project(':foxaria-cases-proxy') {
+    apply plugin: 'com.gradleup.shadow'
+
+    tasks.named('build') {
+        dependsOn tasks.named('shadowJar')
+    }
+
+    tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+        archiveClassifier.set('')
+        mergeServiceFiles()
+        doLast {
+            copy {
+                from archiveFile
+                into "$rootDir/proxy-bungeecord/plugins"
+                rename { 'FoxariaCasesProxy.jar' }
+            }
+        }
+    }
+}
+
+project(':foxaria-hub-guard') {
+    apply plugin: 'com.gradleup.shadow'
+    dependencies {
+        implementation "org.xerial:sqlite-jdbc:${sqliteVersion}"
+        implementation "com.mysql:mysql-connector-j:${mysqlVersion}"
+        implementation "org.postgresql:postgresql:${postgresVersion}"
+    }
+    tasks.named('build') {
+        dependsOn tasks.named('shadowJar')
+    }
+    tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+        archiveClassifier.set('')
+        mergeServiceFiles()
+        // Auto-deploy shadow JAR to server plugin directories after every build.
+        // This prevents accidentally deploying the wrong (non-shadow) JAR without plugin.yml.
+        doLast {
+            copy {
+                from archiveFile
+                into "$rootDir/lobby-server/plugins"
+                rename { 'FoxariaHubGuard.jar' }
+            }
+            copy {
+                from archiveFile
+                into "$rootDir/auth-server/plugins"
+                rename { 'FoxariaHubGuard.jar' }
+            }
+        }
+    }
+}

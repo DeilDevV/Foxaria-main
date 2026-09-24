@@ -1,0 +1,4 @@
+name: FoxariaCasesProxy
+version: 0.1.0-SNAPSHOT
+main: com.foxaria.cases.proxy.FoxariaCasesProxyPlugin
+author: Fox Designer

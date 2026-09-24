@@ -1,0 +1,47 @@
+sidebar:
+  enabled: true
+  title: "&6&lFOXARIA"
+  update-interval-ticks: 100
+  lines:
+    - "&7Полуанархия"
+    - "&8▸ &fПрофиль"
+    - "&7 Ник: &6<player>"
+    - "&7 Ранг: &e<rank>"
+    - "&7 Знания: &d<knowledge>"
+    - "&7 Гильдия: <guild>"
+    - "&8▸ &fСтатистика"
+    - "&7 Смерти: &c<deaths>"
+    - "&7 Киллы: &4<kills>"
+    - "&7 Онлайн: &3<online>"
+    - "&8▸ &fВалюта"
+    - "&7 Баланс: &a<balance>"
+    - "&7 Токены: &b<tokens>"
+    - ""
+    - "&6/menu &7- меню сервера"
+hotbar:
+  enabled: true
+  slot: 8
+  lock-item: true
+  material: COMPASS
+  name: "&6Меню сервера"
+  lore:
+    - "&7ЛКМ/ПКМ: открыть меню"
+    - "&7Если слот занят, используйте /menu"
+titles:
+  join:
+    enabled: true
+    title: "&6FOXARIA"
+    subtitle: "&fПолуанархия"
+    fade-in-millis: 300
+    stay-millis: 1800
+    fade-out-millis: 500
+actionbar:
+  join:
+    enabled: true
+    message: "&6/menu &7- открой меню сервера"
+  menu-open: "&6Открыто меню сервера."
+  menu-hotbar: "&6Меню сервера выдано в хотбар."
+  menu-inventory: "&eМеню сервера добавлено в инвентарь."
+  menu-command-hint: "&6Используйте /menu, если инвентарь заполнен."
+menu:
+  title: "&6Меню Foxaria"

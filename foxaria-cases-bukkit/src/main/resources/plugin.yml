@@ -1,0 +1,19 @@
+name: FoxariaCases
+version: 0.1.0-SNAPSHOT
+main: com.foxaria.cases.bukkit.FoxariaCasesPlugin
+api-version: "1.21.11"
+author: Fox Designer
+softdepend: [Foxaria]
+commands:
+  case:
+    description: "Информация о физических кейсах Foxaria"
+  caseadmin:
+    description: "Админ: физические кейсы (giveblock, givekey, reload)"
+    permission: foxaria.cases.admin
+permissions:
+  foxaria.cases.use:
+    description: "Использование физических кейсов (ПКМ по блоку)"
+    default: true
+  foxaria.cases.admin:
+    description: "Админ-команды /caseadmin"
+    default: op

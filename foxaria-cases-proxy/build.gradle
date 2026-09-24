@@ -1,0 +1,5 @@
+description = 'Standalone BungeeCord bridge for Foxaria Cases rewards'
+
+dependencies {
+    compileOnly files("$rootDir/proxy-bungeecord/BungeeCord.jar")
+}

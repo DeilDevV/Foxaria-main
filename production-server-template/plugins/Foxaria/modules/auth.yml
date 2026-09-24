@@ -1,0 +1,30 @@
+enabled: true
+password:
+  min-length: 6
+  max-length: 64
+  pbkdf2-iterations: 120000
+allowed-commands:
+  - register
+  - login
+reminder-interval-ticks: 80
+titles:
+  welcome:
+    title: "&6FOXARIA"
+    subtitle: "&fДобро пожаловать на сервер"
+  register:
+    title: "&e/register"
+    subtitle: "&fСоздайте пароль для входа"
+  login:
+    title: "&e/login"
+    subtitle: "&fВведите пароль для входа"
+  register-success:
+    title: "&aРегистрация завершена"
+    subtitle: "&fАккаунт создан"
+  login-success:
+    title: "&aВход выполнен"
+    subtitle: "&fПриятной игры"
+actionbar:
+  loading: "&eПроверяем ваш аккаунт..."
+  register: "&e/register <пароль> [повтор] &7- создайте аккаунт"
+  login: "&e/login <пароль> &7- войдите в аккаунт"
+  success: "&aАвторизация завершена."

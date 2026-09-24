@@ -1,0 +1,5 @@
+description = 'Foxaria LuckPerms rank bridge'
+
+dependencies {
+    implementation project(':foxaria-core')
+}

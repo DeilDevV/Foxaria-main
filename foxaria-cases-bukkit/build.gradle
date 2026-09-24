@@ -1,0 +1,6 @@
+description = 'Standalone Foxaria Cases plugin (Paper)'
+
+dependencies {
+    implementation project(':foxaria-cases')
+    implementation project(':foxaria-core')
+}

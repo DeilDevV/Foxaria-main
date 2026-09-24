@@ -1,0 +1,7 @@
+description = 'Foxaria modern furnace (GUI upgrades, pipes)'
+
+dependencies {
+    implementation project(':foxaria-api')
+    implementation project(':foxaria-core')
+    implementation 'com.google.code.gson:gson:2.11.0'
+}

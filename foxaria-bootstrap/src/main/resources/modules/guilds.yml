@@ -1,0 +1,162 @@
+creation:
+  cost: 100000.0
+  name-min: 3
+  name-max: 16
+defaults:
+  start-coins: 0
+  start-points: 0
+  chest-rows: 3
+  shop-tier: 1
+  motd: "Добро пожаловать в гильдию!"
+  friendly-fire: false
+  tag-color: "WHITE"
+limits:
+  base-member-slots: 10
+war:
+  duration-seconds: 1800
+mob-rewards:
+  entities:
+    ZOMBIE:
+      coins: 2
+      points: 1
+    SKELETON:
+      coins: 2
+      points: 1
+    CREEPER:
+      coins: 3
+      points: 2
+    SPIDER:
+      coins: 2
+      points: 1
+upgrades:
+  chest_size:
+    display: "Размер сундука"
+    max-level: 3
+    bank-costs:
+      "1": 1000
+      "2": 2500
+      "3": 5000
+    required-kills:
+      "1": 30
+      "2": 120
+      "3": 300
+    required-guild-level:
+      "1": 1
+      "2": 2
+      "3": 3
+  member_slots:
+    display: "Слоты участников"
+    max-level: 5
+    bank-costs:
+      "1": 900
+      "2": 1900
+      "3": 3200
+      "4": 5000
+      "5": 7600
+    required-kills:
+      "1": 25
+      "2": 80
+      "3": 170
+      "4": 280
+      "5": 420
+    required-guild-level:
+      "1": 1
+      "2": 2
+      "3": 3
+      "4": 4
+      "5": 5
+  shop_tier:
+    display: "Тир магазина"
+    max-level: 3
+    bank-costs:
+      "1": 1200
+      "2": 3200
+      "3": 6800
+    required-kills:
+      "1": 60
+      "2": 180
+      "3": 420
+    required-guild-level:
+      "1": 2
+      "2": 3
+      "3": 5
+  tag_palette:
+    display: "Цвет тега"
+    max-level: 5
+    bank-costs:
+      "1": 800
+      "2": 1500
+      "3": 2300
+      "4": 3200
+      "5": 5600
+    required-kills:
+      "1": 15
+      "2": 40
+      "3": 90
+      "4": 170
+      "5": 360
+    required-guild-level:
+      "1": 1
+      "2": 2
+      "3": 3
+      "4": 4
+      "5": 5
+tag-colors:
+  WHITE:
+    display: "Белый"
+    color-code: "&f"
+    required-palette-level: 0
+  GREEN:
+    display: "Зеленый"
+    color-code: "&a"
+    required-palette-level: 1
+  YELLOW:
+    display: "Желтый"
+    color-code: "&e"
+    required-palette-level: 2
+  AQUA:
+    display: "Голубой"
+    color-code: "&b"
+    required-palette-level: 3
+  GOLD:
+    display: "Золотой"
+    color-code: "&6"
+    required-palette-level: 4
+  LIGHT_PURPLE:
+    display: "Розовый"
+    color-code: "&d"
+    required-palette-level: 5
+  RED:
+    display: "Красный"
+    color-code: "&c"
+    required-palette-level: 5
+roles:
+  OWNER:
+    weight: 100
+    flags: [ALL]
+  OFFICER:
+    weight: 70
+    flags:
+      - INVITE
+      - KICK
+      - CHEST
+      - BANK_DEPOSIT
+      - BANK_WITHDRAW
+      - SHOP_BUY
+      - UPGRADE
+      - TAG_COLOR
+      - MOTD_EDIT
+      - FRIENDLY_FIRE_TOGGLE
+      - LEVEL_REWARD_CLAIM
+      - WAR_INVITE
+      - WAR_QUEUE
+      - WAR_ACCEPT
+      - WAR_ARENA_SELECT
+  MEMBER:
+    weight: 10
+    flags:
+      - CHEST
+      - SHOP_BUY
+      - BANK_DEPOSIT
+      - LEVEL_REWARD_CLAIM
+      - WAR_QUEUE

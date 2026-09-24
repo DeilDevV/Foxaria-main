@@ -1,0 +1,136 @@
+mode: lobby
+
+# Убрать жёлтые «N зашёл / вышел» (как на игровом Foxaria)
+messages:
+  hide-vanilla-join-quit: true
+
+# Точка для auth (spectator): y: -1 = взять min( y-max-fallback, высота_мира - 2 )
+auth:
+  spawn:
+    enabled: true
+    world: world
+    x: 0.5
+    y: -1
+    y-max-fallback: 320.0
+    z: 0.5
+    yaw: 0.0
+    pitch: 0.0
+
+# Меню серверов (только лобби): компас, BungeeCord Connect. На игровом узле отключи mode=lobby.
+lobby-menu:
+  enabled: true
+  # Тики до подстановки «?», если Bungee не ответил на PlayerCount (одиночный мир без прокси)
+  player-count-timeout-ticks: 45
+  # Интервал TCP-пинга бэкендов (секунды). 0 — отключить проверку.
+  server-probe-interval-seconds: 8
+  # Host по умолчанию для server-пинга (когда address задан как ":25568" или "{host}:25568").
+  # Удобно, если вы меняете внешний IP для подключения игроков: бэкенды почти всегда остаются 127.0.0.1.
+  server-probe-default-host: "127.0.0.1"
+  # Текст в лоре, когда очереди нет (0 в очереди на прокси)
+  queue-none-text: "нет"
+  no-damage: true
+  no-food-loss: true
+  lock-compass: true
+  compass-slot: 4
+  compass-name: "&#FF9900&lСерверы Foxaria"
+  compass-lore:
+    - "&7Выбор мира сети"
+    - "&8ПКМ с компасом в руке"
+  gui-title: "&#FF8800&lСерверы Foxaria"
+  # Пустые слоты заполняются стеклом; подсказка внизу — отдельный предмет
+  filler-material: GRAY_STAINED_GLASS_PANE
+  footer-help:
+    enabled: true
+    slot: 22
+    material: BOOK
+    name: "&6&lПодсказки лобби"
+    lore:
+      - "&7Команды Foxaria в лобби:"
+      - "&e/lobby &8— &7вернуться сюда из игры"
+      - "&e/menu &8— &7меню серверов (или компас ПКМ)"
+      - "&e/server &f<имя> &8— &7подключиться к миру"
+      - "&e/help &8— &7список команд"
+  servers:
+    soon_left:
+      slot: 11
+      coming-soon: true
+      soon-material: GRAY_CONCRETE
+      name: "&7Скоро"
+      lore:
+        - "&8Режим в разработке"
+    anarch:
+      slot: 13
+      coming-soon: false
+      material: NETHERITE_SWORD
+      bungee-server: test-game
+      # Адрес бэкенд-сервера для TCP-пинга статуса (host:port)
+      # Можно указать ":25568" (host возьмётся из server-probe-default-host)
+      address: ":25568"
+      max-slots: 200
+      # Красный светлый градиент; если пусто — используется name
+      name-gradient-red: "Анархия"
+      name: "&c&lАнархия"
+      lore:
+        - "&7Классическая анархия: выживание без правил и запретов."
+        - "&7Полный свободный PvP в открытом мире — нападай и защищай базу."
+        - "&7Рейды чужих домов, взрывы, кража ресурсов — всё разрешено."
+        - "&7Гильдии, экономика игроков, торговля и войны за территории."
+        - "&8Для тех, кто хочет хардкор и полный хаос."
+    soon_right:
+      slot: 15
+      coming-soon: true
+      soon-material: GRAY_CONCRETE
+      name: "&7Скоро"
+      lore:
+        - "&8Режим в разработке"
+
+# Префикс доната/ранга в чате (SQLite FoxariaProxy + те же группы, что в plugins/FoxariaProxy/config.yml)
+rank-bridge:
+  enabled: true
+  type: mysql
+  jdbc-url: ""
+  host: 127.0.0.1
+  port: 3306
+  name: foxaria
+  username: foxaria
+  password: Grnkbq2GS7rBj71TWmx
+  # Путь к foxaria-proxy.db: пробуются sqlite-file и sqlite-extra-paths от корня сервера (папка с spigot.yml) и от папки плагина
+  sqlite-file: "plugins/FoxariaProxy/foxaria-proxy.db"
+  sqlite-extra-paths:
+    - "../../proxy-bungeecord/plugins/FoxariaProxy/foxaria-proxy.db"
+  # Резерв при отсутствии синхронизации с прокси; не включай без необходимости (может портить строки).
+  normalize-mojibake-prefix: false
+  table: proxy_privileges
+  fallback-group: default
+  # Groups that are treated as admins for wipe bypass and admin checks
+  admin-groups:
+    - admin
+    - headadmin
+    - co-owner
+    - coadmin
+    - owner
+  groups:
+    default:
+      prefix: "&7Игрок &8| &f"
+    vip:
+      prefix: "&6VIP &8| &f"
+    elite:
+      prefix: "&bЭлита &8| &f"
+    admin:
+      prefix: "&cАдмин &8| &f"
+
+help:
+  header: "&6&lFOXARIA &8» &fДоступные команды"
+  player-lines:
+    - "&e/server &7- выбрать сервер"
+    - "&e/menu &7- основное меню"
+  admin-lines:
+    - "&c/op-команды доступны только админам"
+
+restrictions:
+  block-place-break: true
+  block-interact: true
+  inventory-interact: true
+  drop-pickup: true
+  pvp: true
+  force-gamemode-adventure: true

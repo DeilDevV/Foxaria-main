@@ -1,0 +1,27 @@
+# В оффере можно указать item-template: "id" (создать через /itemtemplate).
+# material — запасная иконка, если шаблон недоступен (часто PAPER).
+categories:
+  blocks:
+    display-name: Блоки
+    offers:
+      stone:
+        display-name: Камень x64
+        material: STONE
+        amount: 64
+        buy-price: 32.0
+        sell-price: 10.0
+      obsidian:
+        display-name: Обсидиан x16
+        material: OBSIDIAN
+        amount: 16
+        buy-price: 64.0
+        sell-price: 18.0
+  farming:
+    display-name: Фермерство
+    offers:
+      bread:
+        display-name: Хлеб x16
+        material: BREAD
+        amount: 16
+        buy-price: 24.0
+        sell-price: 6.0

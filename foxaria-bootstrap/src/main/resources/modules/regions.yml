@@ -1,0 +1,108 @@
+# Регионы (ядро привата) и рейды. Значения можно менять без пересборки логики.
+
+# Высота от нижнего блока ядра (стол кузницы): не меняется при улучшении уровня.
+# blocks-down-from-core-base: -1 — низ региона до минимальной высоты мира (дно).
+region-bounds:
+  blocks-down-from-core-base: -1
+  blocks-up-from-core-base: 100
+
+core:
+  max-hp: 100
+  weapon-damage: 5
+  min-attack-cooldown: 0.99
+
+# half-size-blocks — расстояние от ядра в одну сторону по X/Z (зона (2×half+1)×(2×half+1)).
+levels:
+  "1":
+    half-size-blocks: 30
+    upgrade:
+      coins: 15000
+      wood: 64
+      iron: 32
+  "2":
+    half-size-blocks: 50
+    upgrade:
+      coins: 35000
+      wood: 128
+      iron: 64
+  "3":
+    half-size-blocks: 75
+    upgrade: null
+
+cabinet-craft:
+  logs-required: 32
+  iron-ingots-required: 16
+  wood-must-match-type: true
+
+# Имя привата, снос, частицы, уведомления о вторжении
+privat:
+  rename-cost-coins: 10000
+  rename-name-min-len: 2
+  rename-name-max-len: 32
+  dismantle-cooldown-minutes: 30
+  intrusion-alert-min-level: 2
+  intrusion-glow-min-level: 3
+  boundary-particle-period-ticks: 15
+
+regen:
+  idle-before-ms: 300000
+  tick-interval-ticks: 200
+  amount-per-tick: 10
+
+dynamite:
+  tiers:
+    "1":
+      block-damage: 25
+    "2":
+      block-damage: 50
+    "3":
+      block-damage: 75
+    "4":
+      block-damage: 100
+  explosion-pattern:
+    xz-radius: 1
+    vertical-half-height: 0
+
+# Если тип блока не перечислен — default-hp
+block-hp:
+  default-hp: 120
+  bedrock-hp: 0
+  values:
+    OAK_LOG: 100
+    BIRCH_LOG: 100
+    SPRUCE_LOG: 100
+    JUNGLE_LOG: 100
+    ACACIA_LOG: 100
+    DARK_OAK_LOG: 100
+    MANGROVE_LOG: 100
+    CHERRY_LOG: 100
+    CRIMSON_STEM: 100
+    WARPED_STEM: 100
+    CHEST: 100
+    TRAPPED_CHEST: 100
+    BARREL: 100
+    STONE: 175
+    COBBLESTONE: 175
+    ENDER_CHEST: 200
+    OBSIDIAN: 300
+
+# Справка для /raid (название, материалы — для описания в GUI)
+raid-manual:
+  dynamite-1:
+    name: "&cДинамит рейда I"
+    lore:
+      - "&7Урон блокам в привате: &f25"
+      - "&7Крафт (пример): &f8 TNT + 16 пороха"
+  dynamite-2:
+    name: "&cДинамит рейда II"
+    lore:
+      - "&7Урон: &f50"
+      - "&7Крафт (пример): &f16 TNT + 32 пороха"
+  dynamite-3:
+    name: "&cДинамит рейда III"
+    lore:
+      - "&7Урон: &f75"
+  dynamite-4:
+    name: "&cДинамит рейда IV"
+    lore:
+      - "&7Урон: &f100"

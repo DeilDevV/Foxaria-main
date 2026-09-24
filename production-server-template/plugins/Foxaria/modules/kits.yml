@@ -1,0 +1,29 @@
+kits:
+  starter:
+    display-name: Старт
+    permission: foxaria.kits.use.starter
+    cooldown-seconds: 0
+    required-playtime-seconds: 0
+    items:
+      - material: STONE_SWORD
+        amount: 1
+      - material: BREAD
+        amount: 16
+  daily:
+    display-name: Ежедневный
+    permission: foxaria.kits.use.daily
+    cooldown-seconds: 86400
+    required-playtime-seconds: 3600
+    items:
+      - material: IRON_SWORD
+        amount: 1
+      - material: COOKED_BEEF
+        amount: 24
+  vip:
+    display-name: VIP
+    permission: foxaria.kits.use.vip
+    cooldown-seconds: 43200
+    required-playtime-seconds: 0
+    items:
+      - material: DIAMOND
+        amount: 4

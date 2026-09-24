@@ -1,0 +1,26 @@
+command-window-millis: 5000
+max-command-hits: 12
+payload-protection:
+  block-book-payloads: true
+  block-sign-payloads: true
+exploit-blacklist:
+  enabled: true
+  blocked-roots:
+    - "plugins"
+    - "bukkit:plugins"
+    - "version"
+    - "bukkit:version"
+    - "icanhasbukkit"
+    - "paper:version"
+  blocked-substrings:
+    - "run_command_block_minecart"
+    - "minecraft:execute"
+container-spam:
+  enabled: true
+  window-millis: 2000
+  max-opens-per-window: 12
+grim:
+  alerts-bridge-enabled: true
+  verbose-command: "/security verbose"
+  alert-command-sample: "grimhook alert %player% %check% %verbose%"
+  punish-command-sample: "grimhook punish %player% %check% punished"
