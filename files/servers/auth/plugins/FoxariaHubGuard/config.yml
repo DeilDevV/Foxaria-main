@@ -1,0 +1,120 @@
+mode: auth
+
+messages:
+  hide-vanilla-join-quit: true
+
+auth:
+  spawn:
+    enabled: true
+    world: auth_void
+    x: 0.5
+    y: -1
+    y-max-fallback: 320.0
+    z: 0.5
+    yaw: 0.0
+    pitch: 0.0
+
+lobby-menu:
+  enabled: true
+  player-count-timeout-ticks: 45
+  server-probe-interval-seconds: 8
+  server-probe-default-host: "127.0.0.1"
+  queue-none-text: "РЅРµС‚"
+  no-damage: true
+  no-food-loss: true
+  lock-compass: true
+  compass-slot: 4
+  compass-name: "&#FF9900&lРЎРµСЂРІРµСЂС‹ Foxaria"
+  compass-lore:
+    - "&7Р’С‹Р±РѕСЂ РјРёСЂР° СЃРµС‚Рё"
+    - "&8РџРљРњ СЃ РєРѕРјРїР°СЃРѕРј РІ СЂСѓРєРµ"
+  gui-title: "&#FF8800&lРЎРµСЂРІРµСЂС‹ Foxaria"
+  filler-material: GRAY_STAINED_GLASS_PANE
+  footer-help:
+    enabled: true
+    slot: 22
+    material: BOOK
+    name: "&6&lРџРѕРґСЃРєР°Р·РєРё Р»РѕР±Р±Рё"
+    lore:
+      - "&7РљРѕРјР°РЅРґС‹ Foxaria РІ Р»РѕР±Р±Рё:"
+      - "&e/lobby &8вЂ” &7РІРµСЂРЅСѓС‚СЊСЃСЏ СЃСЋРґР° РёР· РёРіСЂС‹"
+      - "&e/menu &8вЂ” &7РјРµРЅСЋ СЃРµСЂРІРµСЂРѕРІ (РёР»Рё РєРѕРјРїР°СЃ РџРљРњ)"
+      - "&e/server &f<РёРјСЏ> &8вЂ” &7РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє РјРёСЂСѓ"
+      - "&e/help &8вЂ” &7СЃРїРёСЃРѕРє РєРѕРјР°РЅРґ"
+  servers:
+    soon_left:
+      slot: 11
+      coming-soon: true
+      soon-material: GRAY_CONCRETE
+      name: "&7РЎРєРѕСЂРѕ"
+      lore:
+        - "&8Р РµР¶РёРј РІ СЂР°Р·СЂР°Р±РѕС‚РєРµ"
+    anarch:
+      slot: 13
+      coming-soon: false
+      material: NETHERITE_SWORD
+      bungee-server: test-game
+      address: ":25568"
+      max-slots: 200
+      name-gradient-red: "РђРЅР°СЂС…РёСЏ"
+      name: "&c&lРђРЅР°СЂС…РёСЏ"
+      lore:
+        - "&7РљР»Р°СЃСЃРёС‡РµСЃРєР°СЏ Р°РЅР°СЂС…РёСЏ: РІС‹Р¶РёРІР°РЅРёРµ Р±РµР· РїСЂР°РІРёР» Рё Р·Р°РїСЂРµС‚РѕРІ."
+        - "&7РџРѕР»РЅС‹Р№ СЃРІРѕР±РѕРґРЅС‹Р№ PvP РІ РѕС‚РєСЂС‹С‚РѕРј РјРёСЂРµ вЂ” РЅР°РїР°РґР°Р№ Рё Р·Р°С‰РёС‰Р°Р№ Р±Р°Р·Сѓ."
+        - "&7Р РµР№РґС‹ С‡СѓР¶РёС… РґРѕРјРѕРІ, РІР·СЂС‹РІС‹, РєСЂР°Р¶Р° СЂРµСЃСѓСЂСЃРѕРІ вЂ” РІСЃС‘ СЂР°Р·СЂРµС€РµРЅРѕ."
+        - "&7Р“РёР»СЊРґРёРё, СЌРєРѕРЅРѕРјРёРєР° РёРіСЂРѕРєРѕРІ, С‚РѕСЂРіРѕРІР»СЏ Рё РІРѕР№РЅС‹ Р·Р° С‚РµСЂСЂРёС‚РѕСЂРёРё."
+        - "&8Р”Р»СЏ С‚РµС…, РєС‚Рѕ С…РѕС‡РµС‚ С…Р°СЂРґРєРѕСЂ Рё РїРѕР»РЅС‹Р№ С…Р°РѕСЃ."
+    soon_right:
+      slot: 15
+      coming-soon: true
+      soon-material: GRAY_CONCRETE
+      name: "&7РЎРєРѕСЂРѕ"
+      lore:
+        - "&8Р РµР¶РёРј РІ СЂР°Р·СЂР°Р±РѕС‚РєРµ"
+
+rank-bridge:
+  enabled: true
+  type: mysql
+  jdbc-url: ""
+  host: 127.0.0.1
+  port: 3306
+  name: foxaria
+  username: foxaria
+  password: Grnkbq2GS7rBj71TWmx
+  sqlite-file: "plugins/FoxariaProxy/foxaria-proxy.db"
+  sqlite-extra-paths:
+    - "../../proxy/plugins/FoxariaProxy/foxaria-proxy.db"
+  normalize-mojibake-prefix: false
+  table: proxy_privileges
+  fallback-group: default
+  admin-groups:
+    - admin
+    - headadmin
+    - co-owner
+    - coadmin
+    - owner
+  groups:
+    default:
+      prefix: "&7РРіСЂРѕРє &8| &f"
+    vip:
+      prefix: "&6VIP &8| &f"
+    elite:
+      prefix: "&bР­Р»РёС‚Р° &8| &f"
+    admin:
+      prefix: "&cРђРґРјРёРЅ &8| &f"
+
+help:
+  header: "&6&lFOXARIA &8В» &fР”РѕСЃС‚СѓРїРЅС‹Рµ РєРѕРјР°РЅРґС‹"
+  player-lines:
+    - "&e/server &7- РІС‹Р±СЂР°С‚СЊ СЃРµСЂРІРµСЂ"
+    - "&e/menu &7- РѕСЃРЅРѕРІРЅРѕРµ РјРµРЅСЋ"
+  admin-lines:
+    - "&c/op-РєРѕРјР°РЅРґС‹ РґРѕСЃС‚СѓРїРЅС‹ С‚РѕР»СЊРєРѕ Р°РґРјРёРЅР°Рј"
+
+restrictions:
+  block-place-break: true
+  block-interact: true
+  inventory-interact: true
+  drop-pickup: true
+  pvp: true
+  force-gamemode-adventure: true

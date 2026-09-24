@@ -1,0 +1,14 @@
+{
+  "_comment": "Заполни эти данные — больше ничего от тебя не нужно",
+
+  "host": "150.241.66.236",
+  "port": 22,
+  "username": "admin",
+  "password": "9GdogjqeveXy",
+
+  "remote": {
+    "site_dir": "C:/Foxaria/site",
+    "minecraft_dir": "C:/Foxaria/minecraft",
+    "node_version": "20"
+  }
+}

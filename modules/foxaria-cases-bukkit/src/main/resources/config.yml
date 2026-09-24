@@ -1,0 +1,13 @@
+environment: dev
+database:
+  type: mysql
+  file: foxaria.db
+  host: 127.0.0.1
+  port: 3306
+  name: foxaria
+  username: foxaria
+  password: change-me
+  pool:
+    maximum-size: 10
+    minimum-idle: 2
+  executor-threads: 4

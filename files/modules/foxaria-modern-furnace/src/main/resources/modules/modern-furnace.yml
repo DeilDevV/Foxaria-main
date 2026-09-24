@@ -1,0 +1,48 @@
+
+gui:
+  refresh-interval-ticks: 4
+
+balance:
+  cook-time-factors:
+    - 1.0
+    - 0.84
+    - 0.68
+    - 0.52
+    - 0.36
+  fuel-duration-multipliers:
+    - 1.0
+    - 2.0
+    - 3.0
+    - 4.0
+    - 5.0
+  output-multipliers:
+    - 1
+    - 2
+    - 3
+    - 4
+  parallel-lanes:
+    - 1
+    - 2
+    - 3
+    - 4
+
+prices:
+  speed:
+    - 500.0
+    - 1200.0
+    - 2500.0
+    - 5000.0
+  fuel:
+    - 500.0
+    - 1200.0
+    - 2500.0
+    - 5000.0
+  output:
+    - 800.0
+    - 2000.0
+    - 4500.0
+  parallel:
+    - 1500.0
+    - 4000.0
+    - 8000.0
+  pipes-unlock: 10000.0

@@ -1,0 +1,102 @@
+environment: dev
+debug: false
+broadcast:
+  hide-vanilla-join-quit: true
+# [VM] MySQL хостинга: host/port/name/username/password. Для локального запуска без MySQL — type: sqlite
+database:
+  type: mysql
+  file: foxaria.db
+  host: 127.0.0.1
+  port: 3306
+  name: foxaria
+  username: foxaria
+  password: Grnkbq2GS7rBj71TWmx
+  pool:
+    maximum-size: 10
+    minimum-idle: 2
+  executor-threads: 4
+teleport-warmup:
+  ticks: 60
+combat-tag:
+  duration-seconds: 15
+  kill-on-logout: true
+# Спавна на гриферском сервере нет — защита спавна отключена.
+spawn-protection:
+  enabled: false
+  world: world
+  radius: 0
+  block-chorus-into-spawn: false
+homes:
+  default-limit: 2
+tpa:
+  request-expiry-seconds: 60
+# [VM] Случайный заброс. Общего спавна на сервере нет:
+# игрок получает случайную точку при первом входе и после смерти.
+rtp:
+  world: world
+  radius: 5000
+  min-distance: 500
+  max-attempts: 24
+  max-chunk-generations: 4
+  search-timeout-ticks: 200
+  min-surface-y: 50
+  surface-scan-down: 96
+  cooldown-seconds: 300
+  avoid-regions-distance: 50
+  avoid-structures:
+    enabled: true
+    radius: 8
+    step: 3
+  pool:
+    enabled: true
+    size: 12
+    refill-period-ticks: 100
+    fill-delay-ticks: 60
+  auto-first-join:
+    enabled: true
+    delay-ticks: 40
+    guard-timeout-ticks: 200
+    tracker-file: first-join.txt
+  respawn:
+    enabled: true
+  titles:
+    fade-in-ms: 300
+    stay-ms: 1400
+    fade-out-ms: 500
+    first-join:
+      title: "&6FOXARIA"
+      subtitle: "&eСлучайная точка высадки"
+    queued:
+      title: "&6RTP"
+      subtitle: "&eИщем безопасную точку..."
+    success:
+      title: "&aГотово"
+      subtitle: "&fТелепортация выполнена"
+    failed:
+      title: "&cОшибка"
+      subtitle: "&fНе удалось найти безопасную точку"
+    cooldown:
+      title: "&cRTP"
+      subtitle: "&eПерезарядка: &f<seconds>с"
+nether-roof-protection:
+  enabled: true
+  max-y: 127.0
+lag-protection:
+  cleanup-interval-ticks: 1200
+  item-despawn-ticks: 2400
+  chunk-entity-limit: 180
+economy:
+  transfer-fee-percent: 2.5
+
+sleepers:
+  enabled: true
+  world: world
+  only-main-world: true
+  name-format: "&cСлиппер &8| &f"
+  debug: false
+
+# [VM] Раздел ВАЙП в админ-панели (необратимая очистка игровых данных).
+# Донат-токены, купленные ранги и наказания не затрагиваются никогда.
+wipe:
+  confirm-seconds: 10
+  cooldown-seconds: 60

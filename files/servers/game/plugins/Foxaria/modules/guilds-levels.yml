@@ -1,0 +1,417 @@
+
+menu:
+  title: "&5&lКвесты гильдии &8| &f<name>"
+  size: 54
+  snake-slots: [10,11,12,13,14,15,16,25,24,23,22,21,20,19,28,29,30,31,32,33,34,43,42,41,40,39,38,37]
+  locked-name: "&8Закрыто"
+  locked-lore:
+    - "&7Сначала завершите предыдущий квест цепочки."
+
+quests:
+  "1":
+    required-points: 0
+    guild-tier: 1
+    display: "&a&l#1 — Железный фундамент"
+    objectives-text:
+      - "&7Совместная добыча и складывание в общий сундук."
+    objectives:
+      - type: SUBMIT_ITEMS
+        material: IRON_INGOT
+        amount: 128
+      - type: BLOCK_BREAK
+        material: IRON_ORE
+        amount: 96
+    rewards:
+      money: "1500.00"
+      items:
+        - material: EMERALD
+          amount: 48
+          name: "&aВзнос в сундук"
+          lore:
+            - "&7Награда цепочки гильдии"
+  "2":
+    required-points: 0
+    guild-tier: 1
+    display: "&a&l#2 — Ночной рейд"
+    objectives-text:
+      - "&7Фарм в оверворлде; считаются убийства всех участников."
+    objectives:
+      - type: ENTITY_KILL
+        entity: ZOMBIE
+        amount: 180
+      - type: ENTITY_KILL
+        entity: SKELETON
+        amount: 120
+    rewards:
+      money: "2200.00"
+      items:
+        - material: GOLD_INGOT
+          amount: 32
+          name: "&6Золото в общий сундук"
+  "3":
+    required-points: 0
+    guild-tier: 1
+    display: "&a&l#3 — Каменоломня"
+    objectives-text:
+      - "&7Строительный запас на базу и аутпосты."
+    objectives:
+      - type: BLOCK_BREAK
+        material: STONE
+        amount: 1400
+      - type: SUBMIT_ITEMS
+        material: COBBLESTONE
+        amount: 768
+    rewards:
+      money: "2800.00"
+      items:
+        - material: DIAMOND
+          amount: 8
+          name: "&bАлмазы"
+  "4":
+    required-points: 0
+    guild-tier: 1
+    display: "&e&l#4 — Запас еды"
+    objectives-text:
+      - "&7Аграрный блок: пшеница и готовый хлеб в сундук."
+    objectives:
+      - type: SUBMIT_ITEMS
+        material: WHEAT
+        amount: 384
+      - type: SUBMIT_ITEMS
+        material: BREAD
+        amount: 128
+    rewards:
+      money: "3500.00"
+      items:
+        - material: GOLD_BLOCK
+          amount: 4
+          name: "&6Золотые блоки"
+
+  "5":
+    required-points: 0
+    guild-tier: 2
+    display: "&e&l#5 — Лавовые глубины"
+    objectives-text:
+      - "&7Незер без спешки не покорить — держите связь и броню."
+    objectives:
+      - type: BLOCK_BREAK
+        material: NETHERRACK
+        amount: 2000
+      - type: ENTITY_KILL
+        entity: MAGMA_CUBE
+        amount: 60
+    rewards:
+      money: "4200.00"
+      items:
+        - material: NETHER_WART
+          amount: 64
+          name: "&dНезер-склад"
+  "6":
+    required-points: 0
+    guild-tier: 2
+    display: "&e&l#6 — Крепость ифритов"
+    objectives-text:
+      - "&7Фортеца и крестражи — командная работа."
+    objectives:
+      - type: ENTITY_KILL
+        entity: BLAZE
+        amount: 72
+      - type: SUBMIT_ITEMS
+        material: BLAZE_ROD
+        amount: 32
+    rewards:
+      money: "5000.00"
+      items:
+        - material: GOLD_BLOCK
+          amount: 6
+          name: "&6Золото"
+  "7":
+    required-points: 0
+    guild-tier: 2
+    display: "&e&l#7 — Пиглины и золото"
+    objectives-text:
+      - "&7Торговля и лут в бастионах."
+    objectives:
+      - type: ENTITY_KILL
+        entity: PIGLIN
+        amount: 140
+      - type: SUBMIT_ITEMS
+        material: GOLD_INGOT
+        amount: 96
+    rewards:
+      money: "5800.00"
+      items:
+        - material: DIAMOND
+          amount: 12
+          name: "&bАлмазы"
+  "8":
+    required-points: 0
+    guild-tier: 2
+    display: "&6&l#8 — Древние обломки"
+    objectives-text:
+      - "&7Поиск обломков — долгий гринд на вайп."
+    objectives:
+      - type: SUBMIT_ITEMS
+        material: ANCIENT_DEBRIS
+        amount: 6
+      - type: SUBMIT_ITEMS
+        material: NETHERITE_SCRAP
+        amount: 24
+    rewards:
+      money: "7000.00"
+      items:
+        - material: NETHERITE_SCRAP
+          amount: 8
+          name: "&dДоп. скрап"
+
+  "9":
+    required-points: 0
+    guild-tier: 3
+    display: "&6&l#9 — Крайний край"
+    objectives-text:
+      - "&7Энд: охота на эндерменов и подготовка острова."
+    objectives:
+      - type: ENTITY_KILL
+        entity: ENDERMAN
+        amount: 400
+      - type: BLOCK_BREAK
+        material: END_STONE
+        amount: 512
+    rewards:
+      money: "8000.00"
+      items:
+        - material: ENDER_PEARL
+          amount: 32
+          name: "&5Жемчуг"
+  "10":
+    required-points: 0
+    guild-tier: 3
+    display: "&6&l#10 — Города края"
+    objectives-text:
+      - "&7Шалкеры и хорусы — нужен состав в энд."
+    objectives:
+      - type: ENTITY_KILL
+        entity: SHULKER
+        amount: 24
+      - type: SUBMIT_ITEMS
+        material: CHORUS_FRUIT
+        amount: 160
+    rewards:
+      money: "9000.00"
+      items:
+        - material: SHULKER_SHELL
+          amount: 8
+          name: "&dПанцири"
+  "11":
+    required-points: 0
+    guild-tier: 3
+    display: "&d&l#11 — Мембраны фантомов"
+    objectives-text:
+      - "&7Ночные вылеты и элитры-подготовка."
+    objectives:
+      - type: ENTITY_KILL
+        entity: PHANTOM
+        amount: 48
+      - type: SUBMIT_ITEMS
+        material: PHANTOM_MEMBRANE
+        amount: 36
+    rewards:
+      money: "9500.00"
+      items:
+        - material: DIAMOND
+          amount: 16
+          name: "&bАлмазы"
+  "12":
+    required-points: 0
+    guild-tier: 3
+    display: "&d&l#12 — Кристаллы края"
+    objectives-text:
+      - "&7Добыча кристаллов для респавна дракона."
+    objectives:
+      - type: SUBMIT_ITEMS
+        material: END_CRYSTAL
+        amount: 6
+      - type: ENTITY_KILL
+        entity: ENDERMAN
+        amount: 200
+    rewards:
+      money: "10000.00"
+      items:
+        - material: EMERALD
+          amount: 64
+          name: "&aИзумруды"
+
+  "13":
+    required-points: 0
+    guild-tier: 4
+    display: "&5&l#13 — Рейды деревень"
+    objectives-text:
+      - "&7Волны рейда — только слаженная гильдия."
+    objectives:
+      - type: ENTITY_KILL
+        entity: RAVAGER
+        amount: 6
+      - type: ENTITY_KILL
+        entity: EVOKER
+        amount: 14
+    rewards:
+      money: "11000.00"
+      items:
+        - material: EMERALD
+          amount: 96
+          name: "&aТрофей рейда"
+  "14":
+    required-points: 0
+    guild-tier: 4
+    display: "&5&l#14 — Изумрудная монополия"
+    objectives-text:
+      - "&7Торговля и крупные объёмы изумрудов."
+    objectives:
+      - type: SUBMIT_ITEMS
+        material: EMERALD
+        amount: 160
+      - type: SUBMIT_ITEMS
+        material: IRON_BLOCK
+        amount: 12
+    rewards:
+      money: "12500.00"
+      items:
+        - material: DIAMOND_BLOCK
+          amount: 3
+          name: "&bБлоки алмазов"
+  "15":
+    required-points: 0
+    guild-tier: 4
+    display: "&5&l#15 — Океанский монумент"
+    objectives-text:
+      - "&7Стражи и древние стражи — подводный рейд."
+    objectives:
+      - type: ENTITY_KILL
+        entity: GUARDIAN
+        amount: 45
+      - type: ENTITY_KILL
+        entity: ELDER_GUARDIAN
+        amount: 3
+    rewards:
+      money: "13500.00"
+      items:
+        - material: SPONGE
+          amount: 12
+          name: "&eГубки"
+  "16":
+    required-points: 0
+    guild-tier: 4
+    display: "&d&l#16 — Незеритовая кузница"
+    objectives-text:
+      - "&7Концентрация незерита перед финальными боссами."
+    objectives:
+      - type: SUBMIT_ITEMS
+        material: NETHERITE_INGOT
+        amount: 6
+      - type: SUBMIT_ITEMS
+        material: DIAMOND
+        amount: 64
+    rewards:
+      money: "15000.00"
+      items:
+        - material: NETHERITE_SCRAP
+          amount: 12
+          name: "&dСкрап"
+
+  "17":
+    required-points: 0
+    guild-tier: 5
+    display: "&c&l#17 — Иссушитель"
+    objectives-text:
+      - "&7Соберите гильдию на призвание и убийство иссушителя."
+    objectives:
+      - type: ENTITY_KILL
+        entity: WITHER
+        amount: 1
+      - type: ENTITY_KILL
+        entity: WITHER_SKELETON
+        amount: 160
+    rewards:
+      money: "18000.00"
+      items:
+        - material: BEACON
+          amount: 1
+          name: "&6Маяк гильдии"
+  "18":
+    required-points: 0
+    guild-tier: 5
+    display: "&c&l#18 — Хранитель глубин"
+    objectives-text:
+      - "&7Организуйте рейд в Древний город — элитная цель."
+    objectives:
+      - type: ENTITY_KILL
+        entity: WARDEN
+        amount: 1
+      - type: SUBMIT_ITEMS
+        material: SCULK
+        amount: 512
+    rewards:
+      money: "20000.00"
+      items:
+        - material: DIAMOND_BLOCK
+          amount: 4
+          name: "&bТрофей"
+  "19":
+    required-points: 0
+    guild-tier: 5
+    display: "&c&l#19 — Дракон Края"
+    objectives-text:
+      - "&7Финальный бой с драконом — один зачёт на гильдию."
+    objectives:
+      - type: ENTITY_KILL
+        entity: ENDER_DRAGON
+        amount: 1
+    rewards:
+      money: "22000.00"
+      items:
+        - material: DRAGON_HEAD
+          amount: 1
+          name: "&5Голова дракона"
+          lore:
+            - "&7Трофей убийства дракона"
+  "20":
+    required-points: 0
+    guild-tier: 5
+    display: "&4&l#20 — После дракона"
+    objectives-text:
+      - "&7Города края и элитры — долгий эндгейм."
+    objectives:
+      - type: ENTITY_KILL
+        entity: SHULKER
+        amount: 40
+      - type: SUBMIT_ITEMS
+        material: END_CRYSTAL
+        amount: 12
+    rewards:
+      money: "24000.00"
+      items:
+        - material: ENCHANTED_GOLDEN_APPLE
+          amount: 2
+          name: "&6Чар-геплы"
+  "21":
+    required-points: 0
+    guild-tier: 5
+    display: "&4&l#21 — Наследие гильдии"
+    objectives-text:
+      - "&7Финал цепочки: казна и трофей для всех."
+    objectives:
+      - type: SUBMIT_ITEMS
+        material: EMERALD_BLOCK
+        amount: 16
+      - type: SUBMIT_ITEMS
+        material: NETHERITE_BLOCK
+        amount: 2
+    rewards:
+      money: "35000.00"
+      items:
+        - material: ENCHANTED_GOLDEN_APPLE
+          amount: 4
+          name: "&6&lТрофей гильдии"
+        - material: NETHERITE_INGOT
+          amount: 4
+          name: "&dНезерит"

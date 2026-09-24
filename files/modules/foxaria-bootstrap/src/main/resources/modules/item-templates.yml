@@ -1,0 +1,12 @@
+on-hit-effects:
+  enabled: true
+editor:
+  durability-step: 10
+  attack-damage-step: 0.5
+  attack-speed-step: 0.05
+  attack-knockback-step: 0.05
+  armor-step: 1.0
+  armor-toughness-step: 0.5
+  knockback-resistance-step: 0.05
+  potion-duration-step-ticks: 20
+  potion-extend-all-step-ticks: 100

@@ -1,0 +1,58 @@
+sidebar:
+  enabled: true
+  title: "&6&lFOXARIA"
+  update-interval-ticks: 100
+  lines:
+    - "&7Полуанархия"
+    - "&8▸ &fПрофиль"
+    - "&7 Ник: &6<player>"
+    - "&7 Ранг: <rank>"
+    - "&7 Знания: &d<knowledge>"
+    - "&7 Гильдия: <guild>"
+    - "&8▸ &fСтатистика"
+    - "&7 Смерти: &c<deaths>"
+    - "&7 Киллы: &4<kills>"
+    - "&7 Онлайн: &3<online>"
+    - "&8▸ &fВалюта"
+    - "&7 Баланс: &a<balance>"
+    - "&7 Токены: &b<tokens>"
+    - ""
+    - "&6/menu &7- меню сервера"
+
+hotbar:
+  enabled: true
+  slot: 4
+  lock-item: true
+  vanish-on-drop: true
+  material: COMPASS
+  name: "&6&lМеню сервера"
+  lore:
+    - "&7ПКМ с компасом в руке — открыть меню"
+
+titles:
+  join:
+    enabled: true
+    title: "&6FOXARIA"
+    subtitle: "&fПолуанархия"
+    fade-in-millis: 300
+    stay-millis: 1800
+    fade-out-millis: 500
+
+actionbar:
+  join:
+    enabled: false
+    message: ""
+  menu-open: "&6Меню"
+  menu-hotbar: ""
+  menu-inventory: ""
+  menu-command-hint: ""
+
+menu:
+  title: "&8⟨ &6&lFOXARIA &8│ &fменю игрока &8⟩"
+  rows: 6
+  help-lore:
+    - "&7Наводи на кнопки — там описание"
+    - "&7и команда раздела."
+    - "&8▬▬▬▬▬▬▬▬▬▬▬▬▬"
+    - "&7Полный список команд —"
+    - "&7в кнопке «Все команды» слева."

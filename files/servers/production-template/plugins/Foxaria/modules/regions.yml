@@ -1,0 +1,100 @@
+
+region-bounds:
+  blocks-down-from-core-base: -1
+  blocks-up-from-core-base: 100
+
+core:
+  max-hp: 100
+  weapon-damage: 5
+  min-attack-cooldown: 0.99
+
+levels:
+  "1":
+    half-size-blocks: 64
+    upgrade:
+      coins: 25000
+      wood: 500
+      iron: 100
+  "2":
+    half-size-blocks: 128
+    upgrade:
+      coins: 50000
+      wood: 800
+      iron: 200
+  "3":
+    half-size-blocks: 256
+    upgrade: null
+
+cabinet-craft:
+  logs-required: 32
+  iron-ingots-required: 16
+  wood-must-match-type: true
+
+privat:
+  rename-cost-coins: 10000
+  rename-name-min-len: 2
+  rename-name-max-len: 32
+  dismantle-cooldown-minutes: 30
+  intrusion-alert-min-level: 3
+  boundary-particle-period-ticks: 15
+
+regen:
+  idle-before-ms: 300000
+  tick-interval-ticks: 200
+  amount-per-tick: 10
+
+dynamite:
+  tiers:
+    "1":
+      block-damage: 25
+    "2":
+      block-damage: 50
+    "3":
+      block-damage: 75
+    "4":
+      block-damage: 100
+  explosion-pattern:
+    xz-radius: 1
+    vertical-half-height: 0
+
+block-hp:
+  default-hp: 120
+  bedrock-hp: 0
+  values:
+    OAK_LOG: 100
+    BIRCH_LOG: 100
+    SPRUCE_LOG: 100
+    JUNGLE_LOG: 100
+    ACACIA_LOG: 100
+    DARK_OAK_LOG: 100
+    MANGROVE_LOG: 100
+    CHERRY_LOG: 100
+    CRIMSON_STEM: 100
+    WARPED_STEM: 100
+    CHEST: 100
+    TRAPPED_CHEST: 100
+    BARREL: 100
+    STONE: 175
+    COBBLESTONE: 175
+    ENDER_CHEST: 200
+    OBSIDIAN: 300
+
+raid-manual:
+  dynamite-1:
+    name: "&cДинамит рейда I"
+    lore:
+      - "&7Урон блокам в привате: &f25"
+      - "&7Крафт (пример): &f8 TNT + 16 пороха"
+  dynamite-2:
+    name: "&cДинамит рейда II"
+    lore:
+      - "&7Урон: &f50"
+      - "&7Крафт (пример): &f16 TNT + 32 пороха"
+  dynamite-3:
+    name: "&cДинамит рейда III"
+    lore:
+      - "&7Урон: &f75"
+  dynamite-4:
+    name: "&cДинамит рейда IV"
+    lore:
+      - "&7Урон: &f100"
