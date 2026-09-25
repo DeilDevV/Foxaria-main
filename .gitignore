@@ -134,7 +134,6 @@ forwarding.secret
 # Generated dumps / local scripts output
 # =========================
 scripts/generated/
-*.sql
 *.dump
 
 *.key

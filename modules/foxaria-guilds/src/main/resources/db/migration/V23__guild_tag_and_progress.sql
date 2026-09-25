@@ -1,0 +1,6 @@
+ALTER TABLE fx_guilds ADD COLUMN tag_color VARCHAR(32) NOT NULL DEFAULT 'WHITE';
+
+CREATE TABLE IF NOT EXISTS fx_guild_stats (
+    guild_id VARCHAR(64) PRIMARY KEY,
+    total_kills BIGINT NOT NULL DEFAULT 0
+);
