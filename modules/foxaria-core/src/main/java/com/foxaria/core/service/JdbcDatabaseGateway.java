@@ -21,6 +21,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class JdbcDatabaseGateway implements DatabaseGateway {
 
@@ -102,7 +104,9 @@ public final class JdbcDatabaseGateway implements DatabaseGateway {
                     """);
             }
 
-            for (MigrationScript script : scripts.stream().sorted(Comparator.comparingInt(MigrationScript::version)).toList()) {
+            for (MigrationScript script : scripts.stream()
+                    .sorted(Comparator.comparingInt(MigrationScript::version))
+                    .toList()) {
                 if (isApplied(connection, script.version())) {
                     continue;
                 }
@@ -112,12 +116,12 @@ public final class JdbcDatabaseGateway implements DatabaseGateway {
                     if (migratedSql == null || migratedSql.isBlank()) {
                         continue;
                     }
-                    // SQLite driver is sensitive to prepared DDL; execute raw statement per chunk.
                     try {
-                        if (isSqlite(connection)) {
+                        if (isSqliteConnection(connection)) {
                             String[] alter = parseAlterAddColumn(migratedSql);
                             if (alter != null && columnExists(connection, alter[0], alter[1])) {
-                                logger.warning("Migration V" + script.version() + ": column already exists, skipping " + alter[0] + "." + alter[1]);
+                                logger.warning("Migration V" + script.version()
+                                        + ": column already exists, skipping " + alter[0] + "." + alter[1]);
                                 continue;
                             }
                         }
@@ -126,15 +130,15 @@ public final class JdbcDatabaseGateway implements DatabaseGateway {
                         }
                     } catch (Exception ex) {
                         if (isDuplicateColumn(ex)) {
-                            logger.warning("Migration V" + script.version() + ": duplicate column, skipping statement.");
+                            logger.warning("Migration V" + script.version()
+                                    + ": duplicate column, skipping statement.");
                             continue;
                         }
                         throw ex;
                     }
                 }
                 try (PreparedStatement insert = connection.prepareStatement(
-                    "INSERT INTO fx_schema_history (version, description, applied_at) VALUES (?, ?, ?)"
-                )) {
+                        "INSERT INTO fx_schema_history (version, description, applied_at) VALUES (?, ?, ?)")) {
                     insert.setInt(1, script.version());
                     insert.setString(2, script.description());
                     insert.setLong(3, System.currentTimeMillis());
@@ -148,19 +152,215 @@ public final class JdbcDatabaseGateway implements DatabaseGateway {
         }
     }
 
-    private boolean isDuplicateColumn(Exception ex) {
-        String msg = ex.getMessage();
-        if (msg == null) {
-            return false;
+    // -------------------------------------------------------------------------
+    //  SQL dialect adaptation  (SQLite → MySQL)
+    // -------------------------------------------------------------------------
+
+    private String adaptSqlForDialect(String sql) {
+        if (sql == null || dialect != Dialect.MYSQL) {
+            return sql;
         }
-        String m = msg.toLowerCase();
-        return m.contains("duplicate column")
-            || m.contains("duplicate column name")
-            || m.contains("duplicate key name")
-            || m.contains("already exists");
+
+        String adapted = sql;
+
+        // 1. AUTOINCREMENT
+        adapted = adapted.replaceAll("(?i)INTEGER\\s+PRIMARY\\s+KEY\\s+AUTOINCREMENT",
+                "BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY");
+        adapted = adapted.replaceAll("(?i)INT\\s+PRIMARY\\s+KEY\\s+AUTOINCREMENT",
+                "BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY");
+
+        // 2. Index syntax
+        adapted = adapted.replaceAll("(?i)CREATE\\s+INDEX\\s+IF\\s+NOT\\s+EXISTS", "CREATE INDEX");
+
+        // 3. SQLite-only clauses — just remove them
+        adapted = adapted.replaceAll("(?i)COLLATE\\s+NOCASE", "");
+        adapted = adapted.replaceAll("(?i)WITHOUT\\s+ROWID", "");
+
+        // 4. BOOLEAN → TINYINT(1)
+        adapted = adapted.replaceAll("(?i)\\bBOOLEAN\\b", "TINYINT(1)");
+
+        // 5. INSERT OR IGNORE / INSERT OR REPLACE  (SQLite-only)
+        adapted = adapted.replaceAll("(?i)^\\s*INSERT\\s+OR\\s+IGNORE\\s+", "INSERT IGNORE ");
+        adapted = adapted.replaceAll("(?i)^\\s*INSERT\\s+OR\\s+REPLACE\\s+", "REPLACE ");
+
+        // 6. TEXT columns that are used as keys must become VARCHAR
+        adapted = rewriteTextKeysForMySql(adapted);
+
+        // 7. ON CONFLICT → INSERT IGNORE / ON DUPLICATE KEY UPDATE
+        //    This is the BULLETPROOF version — catches any formatting.
+        adapted = rewriteOnConflictForMySql(adapted);
+
+        return adapted.trim();
     }
 
-    private boolean isSqlite(Connection connection) {
+    /**
+     * MySQL cannot use TEXT as PRIMARY KEY or in a UNIQUE constraint without a prefix length.
+     * This replaces TEXT with VARCHAR(191) for columns that appear to be key candidates
+     * (uuid, id, name, key, etc.) based on column name heuristics.
+     *
+     * Only rewrites TEXT that appears as a column definition inside CREATE TABLE.
+     */
+    private String rewriteTextKeysForMySql(String sql) {
+        // Only act inside CREATE TABLE blocks
+        if (!sql.trim().toUpperCase().startsWith("CREATE TABLE")) {
+            return sql;
+        }
+
+        // Line-by-line: if a line defines a column with TEXT and the column name
+        // looks like a key column, replace TEXT with an appropriate VARCHAR.
+        String[] lines = sql.split("\n");
+        StringBuilder sb = new StringBuilder();
+        for (String line : lines) {
+            sb.append(rewriteTextColumnLine(line)).append("\n");
+        }
+        return sb.toString();
+    }
+
+    private String rewriteTextColumnLine(String line) {
+        // Match:  <optional-whitespace> <column-name> TEXT <optional-constraints>
+        Pattern p = Pattern.compile("^(\\s*)([`\"]?[A-Za-z0-9_]+[`\"]?)(\\s+)TEXT(\\b.*)?$",
+                Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(line);
+        if (!m.matches()) {
+            return line;
+        }
+        String indent = m.group(1);
+        String colRaw = m.group(2);
+        String gap = m.group(3);
+        String rest = m.group(4) == null ? "" : m.group(4);
+
+        String colName = colRaw.replace("`", "").replace("\"", "").toLowerCase();
+        String newType = inferMySqlType(colName, rest);
+        return indent + colRaw + gap + newType + rest;
+    }
+
+    private String inferMySqlType(String colName, String restOfLine) {
+        String restLower = restOfLine == null ? "" : restOfLine.toLowerCase();
+
+        // If column is used as a primary key or unique constraint line, must be VARCHAR
+        boolean isKeyCol = restLower.contains("primary key")
+                || restLower.contains("unique")
+                || colName.contains("uuid")
+                || colName.equals("id")
+                || colName.endsWith("_id")
+                || colName.endsWith("_uuid");
+
+        if (isKeyCol) {
+            if (colName.contains("uuid")) return "VARCHAR(36)";
+            return "VARCHAR(191)";
+        }
+
+        // Long-form content — keep as TEXT
+        if (colName.contains("json")
+                || colName.contains("payload")
+                || colName.contains("data")
+                || colName.contains("description")
+                || colName.contains("notes")
+                || colName.contains("signature")
+                || colName.contains("csv")
+                || colName.contains("base64")
+                || colName.contains("hash")
+                || colName.contains("salt")) {
+            return "TEXT";
+        }
+
+        // Short-string columns → VARCHAR
+        if (colName.contains("name")
+                || colName.contains("key")
+                || colName.contains("world")
+                || colName.contains("type")
+                || colName.contains("role")
+                || colName.contains("status")
+                || colName.contains("tag")
+                || colName.contains("material")
+                || colName.contains("state")
+                || colName.contains("group")
+                || colName.contains("server")
+                || colName.contains("host")
+                || colName.contains("ip")) {
+            return "VARCHAR(191)";
+        }
+
+        // Default — keep TEXT (safe for non-key columns)
+        return "TEXT";
+    }
+
+    /**
+     * BULLETPROOF rewrite of SQLite ON CONFLICT into MySQL syntax.
+     * Uses simple string search — no regex that can silently miss edge cases.
+     */
+    private String rewriteOnConflictForMySql(String sql) {
+        String trimmed = sql.trim();
+
+        // Normalize whitespace for reliable matching
+        String normalized = trimmed.replaceAll("\\s+", " ");
+        String normalizedLower = normalized.toLowerCase();
+
+        // Find "ON CONFLICT" anywhere in the SQL
+        int conflictIdx = normalizedLower.indexOf(" on conflict");
+        if (conflictIdx < 0) {
+            return trimmed;
+        }
+
+        // Find the closing paren after ON CONFLICT(...)
+        int parenOpen = normalizedLower.indexOf("(", conflictIdx);
+        if (parenOpen < 0) return trimmed;
+        int parenClose = normalizedLower.indexOf(")", parenOpen);
+        if (parenClose < 0) return trimmed;
+
+        // What comes after the closing paren?
+        String afterParen = normalizedLower.substring(parenClose + 1).trim();
+
+        if (afterParen.startsWith("do nothing")) {
+            // ON CONFLICT(...) DO NOTHING  →  INSERT IGNORE (remove ON CONFLICT part)
+            String beforeConflict = normalized.substring(0, conflictIdx);
+            // Replace "INSERT" with "INSERT IGNORE" in the part before ON CONFLICT
+            int insertPos = beforeConflict.toLowerCase().indexOf("insert");
+            if (insertPos < 0) return trimmed;
+            return beforeConflict.substring(0, insertPos)
+                    + "INSERT IGNORE"
+                    + beforeConflict.substring(insertPos + "INSERT".length());
+
+        } else if (afterParen.startsWith("do update set ") || afterParen.startsWith("do update set\n")) {
+            // ON CONFLICT(...) DO UPDATE SET ...  →  ON DUPLICATE KEY UPDATE ...
+            String beforeConflict = normalized.substring(0, conflictIdx);
+
+            // Find where "SET " starts after DO UPDATE
+            int setKeyword = normalizedLower.indexOf(" set ", parenClose);
+            if (setKeyword < 0) return trimmed;
+            String setPart = normalized.substring(setKeyword + " set ".length()).trim();
+
+            // Replace excluded.col → VALUES(col)
+            setPart = setPart.replaceAll("(?i)\\bexcluded\\.([A-Za-z0-9_]+)", "VALUES($1)");
+
+            // Replace table.col + VALUES(col) → col + VALUES(col)
+            setPart = setPart.replaceAll(
+                    "(?i)\\b[A-Za-z0-9_]+\\.([A-Za-z0-9_]+)(\\s*\\+\\s*VALUES\\([^)]+\\))", "$1$2");
+
+            return beforeConflict + " ON DUPLICATE KEY UPDATE " + setPart;
+        }
+
+        // Unknown pattern after ON CONFLICT — return as-is (will likely fail, but at least logged)
+        logger.warning("adaptSqlForDialect: unknown ON CONFLICT pattern, passing through: "
+                + normalizedLower.substring(conflictIdx, Math.min(conflictIdx + 80, normalizedLower.length())));
+        return trimmed;
+    }
+
+    // -------------------------------------------------------------------------
+    //  Helpers
+    // -------------------------------------------------------------------------
+
+    private boolean isDuplicateColumn(Exception ex) {
+        String msg = ex.getMessage();
+        if (msg == null) return false;
+        String m = msg.toLowerCase();
+        return m.contains("duplicate column")
+                || m.contains("duplicate column name")
+                || m.contains("duplicate key name")
+                || m.contains("already exists");
+    }
+
+    private boolean isSqliteConnection(Connection connection) {
         try {
             String url = connection.getMetaData().getURL();
             return url != null && url.startsWith("jdbc:sqlite:");
@@ -169,7 +369,7 @@ public final class JdbcDatabaseGateway implements DatabaseGateway {
         }
     }
 
-    /** @return [table, column] for ALTER TABLE ... ADD COLUMN ..., else null */
+    /** @return [table, column] for ALTER TABLE … ADD COLUMN …, or null */
     private String[] parseAlterAddColumn(String sql) {
         if (sql == null) return null;
         String s = stripLeadingLineComments(sql).trim().replaceAll("\\s+", " ");
@@ -180,13 +380,10 @@ public final class JdbcDatabaseGateway implements DatabaseGateway {
         String tablePart = s.substring("alter table ".length(), addIdx).trim();
         String colPart = s.substring(addIdx + " add column ".length()).trim();
         if (tablePart.isEmpty() || colPart.isEmpty()) return null;
-        // colPart may include type/constraints: take first token
-        String col = colPart.split(" ")[0].trim();
-        if (col.isEmpty()) return null;
-        // strip quotes/backticks if any
-        col = col.replace("`", "").replace("\"", "");
+        String col = colPart.split(" ")[0].trim()
+                .replace("`", "").replace("\"", "");
         tablePart = tablePart.replace("`", "").replace("\"", "");
-        return new String[]{ tablePart, col };
+        return new String[]{tablePart, col};
     }
 
     private String stripLeadingLineComments(String sql) {
@@ -195,31 +392,59 @@ public final class JdbcDatabaseGateway implements DatabaseGateway {
         boolean started = false;
         for (String line : lines) {
             String t = line.trim();
-            if (!started) {
-                if (t.isEmpty() || t.startsWith("--")) {
-                    continue;
-                }
-                started = true;
-            }
+            if (!started && (t.isEmpty() || t.startsWith("--"))) continue;
+            started = true;
             sb.append(line).append('\n');
         }
         return sb.toString();
     }
 
     private boolean columnExists(Connection connection, String table, String column) {
-        try (PreparedStatement ps = connection.prepareStatement("PRAGMA table_info(" + table + ")")) {
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    String name = rs.getString("name");
-                    if (name != null && name.equalsIgnoreCase(column)) {
-                        return true;
-                    }
-                }
+        try (PreparedStatement ps = connection.prepareStatement("PRAGMA table_info(" + table + ")");
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                String name = rs.getString("name");
+                if (name != null && name.equalsIgnoreCase(column)) return true;
             }
         } catch (Exception ignored) {
         }
         return false;
     }
+
+    private boolean isApplied(Connection connection, int version) throws Exception {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT version FROM fx_schema_history WHERE version = ?")) {
+            ps.setInt(1, version);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    private List<String> readSqlStatements(String resourcePath) throws Exception {
+        InputStream inputStream = plugin.getResource(resourcePath);
+        if (inputStream == null) {
+            throw new IllegalStateException("Migration resource not found: " + resourcePath);
+        }
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            String content = reader.lines().map(line -> {
+                String t = line.trim();
+                if (t.startsWith("--")) return "";
+                int idx = line.indexOf("--");
+                return idx >= 0 ? line.substring(0, idx) : line;
+            }).reduce("", (a, b) -> a + "\n" + b);
+
+            return java.util.Arrays.stream(content.split(";"))
+                    .map(String::trim)
+                    .filter(s -> !s.isBlank())
+                    .toList();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    //  DatabaseGateway interface
+    // -------------------------------------------------------------------------
 
     @Override
     public <T> CompletableFuture<T> query(SqlFunction<Connection, T> work) {
@@ -244,10 +469,11 @@ public final class JdbcDatabaseGateway implements DatabaseGateway {
     }
 
     @Override
-    public PreparedStatement prepare(Connection connection, String sql, Object... parameters) throws java.sql.SQLException {
+    public PreparedStatement prepare(Connection connection, String sql,
+                                     Object... parameters) throws java.sql.SQLException {
         PreparedStatement statement = connection.prepareStatement(sql);
-        for (int index = 0; index < parameters.length; index++) {
-            statement.setObject(index + 1, parameters[index]);
+        for (int i = 0; i < parameters.length; i++) {
+            statement.setObject(i + 1, parameters[i]);
         }
         return statement;
     }
@@ -255,64 +481,5 @@ public final class JdbcDatabaseGateway implements DatabaseGateway {
     @Override
     public Dialect dialect() {
         return dialect;
-    }
-
-    private boolean isApplied(Connection connection, int version) throws Exception {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT version FROM fx_schema_history WHERE version = ?")) {
-            statement.setInt(1, version);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                return resultSet.next();
-            }
-        }
-    }
-
-    private List<String> readSqlStatements(String resourcePath) throws Exception {
-        InputStream inputStream = plugin.getResource(resourcePath);
-        if (inputStream == null) {
-            throw new IllegalStateException("Migration resource not found: " + resourcePath);
-        }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            // Strip SQL line comments to avoid SQLite executing bare "-- ..." fragments after splitting by ';'.
-            String content = reader.lines().map(line -> {
-                String t = line.trim();
-                if (t.startsWith("--")) {
-                    return "";
-                }
-                int idx = line.indexOf("--");
-                if (idx >= 0) {
-                    return line.substring(0, idx);
-                }
-                return line;
-            }).reduce("", (left, right) -> left + "\n" + right);
-            return java.util.Arrays.stream(content.split(";"))
-                .map(String::trim)
-                .filter(sql -> !sql.isBlank())
-                .toList();
-        }
-    }
-
-    private String adaptSqlForDialect(String sql) {
-        if (sql == null || dialect != Dialect.MYSQL) {
-            return sql;
-        }
-        String adapted = sql;
-        adapted = adapted.replaceAll("(?i)INTEGER\\s+PRIMARY\\s+KEY\\s+AUTOINCREMENT", "BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY");
-        adapted = adapted.replaceAll("(?i)INT\\s+PRIMARY\\s+KEY\\s+AUTOINCREMENT", "BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY");
-        adapted = adapted.replaceAll("(?i)CREATE\\s+INDEX\\s+IF\\s+NOT\\s+EXISTS", "CREATE INDEX");
-        adapted = rewriteInsertDoNothingForMySql(adapted);
-        return adapted;
-    }
-
-    private String rewriteInsertDoNothingForMySql(String sql) {
-        String trimmed = sql.trim();
-        String lower = trimmed.toLowerCase();
-        // Use regex-based search to handle any whitespace (spaces, newlines) before ON CONFLICT
-        java.util.regex.Matcher m = java.util.regex.Pattern
-                .compile("(?i)\\s+on\\s+conflict\\s*\\(.*?\\)\\s+do\\s+nothing", java.util.regex.Pattern.DOTALL)
-                .matcher(trimmed);
-        if (!lower.startsWith("insert into ") || !m.find()) {
-            return sql;
-        }
-        return "INSERT IGNORE" + trimmed.substring("INSERT".length(), m.start());
     }
 }
