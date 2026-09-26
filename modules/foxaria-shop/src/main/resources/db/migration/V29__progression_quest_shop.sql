@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS fx_player_progression (
     knowledge_level INT NOT NULL DEFAULT 1,
     current_quest_id VARCHAR(64),
     quest_progress BIGINT NOT NULL DEFAULT 0,
-    completed_quests TEXT NOT NULL DEFAULT ''
-);
+    completed_quests TEXT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS fx_progression_shop_offers (
     id VARCHAR(36) PRIMARY KEY,
@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS fx_progression_shop_offers (
     item_blob TEXT,
     item_template VARCHAR(64) NOT NULL DEFAULT '',
     sort_order INT NOT NULL DEFAULT 0,
-    created_at BIGINT NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_prog_shop_cat ON fx_progression_shop_offers (category, sort_order);
+    created_at BIGINT NOT NULL,
+    INDEX idx_prog_shop_cat (category, sort_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

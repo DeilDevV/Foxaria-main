@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS fx_punishments (
     reason VARCHAR(255) NOT NULL,
     created_at BIGINT NOT NULL,
     expires_at BIGINT NOT NULL,
-    active BOOLEAN NOT NULL
-);
+    active TINYINT(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS fx_reports (
     id VARCHAR(36) PRIMARY KEY,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS fx_reports (
     reason VARCHAR(255) NOT NULL,
     status VARCHAR(16) NOT NULL,
     created_at BIGINT NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS fx_staff_notes (
     id VARCHAR(36) PRIMARY KEY,
@@ -24,4 +24,4 @@ CREATE TABLE IF NOT EXISTS fx_staff_notes (
     actor_uuid VARCHAR(36) NOT NULL,
     note TEXT NOT NULL,
     created_at BIGINT NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

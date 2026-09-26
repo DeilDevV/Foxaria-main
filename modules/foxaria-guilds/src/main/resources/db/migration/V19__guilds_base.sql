@@ -6,11 +6,11 @@ CREATE TABLE IF NOT EXISTS fx_guilds (
     bank_balance VARCHAR(64) NOT NULL,
     guild_coins BIGINT NOT NULL DEFAULT 0,
     guild_points BIGINT NOT NULL DEFAULT 0,
-    level INTEGER NOT NULL DEFAULT 1,
-    chest_rows INTEGER NOT NULL DEFAULT 3,
-    shop_tier INTEGER NOT NULL DEFAULT 1,
-    member_slots_bonus INTEGER NOT NULL DEFAULT 0
-);
+    level INT NOT NULL DEFAULT 1,
+    chest_rows INT NOT NULL DEFAULT 3,
+    shop_tier INT NOT NULL DEFAULT 1,
+    member_slots_bonus INT NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS fx_guild_members (
     guild_id VARCHAR(64) NOT NULL,
@@ -20,16 +20,16 @@ CREATE TABLE IF NOT EXISTS fx_guild_members (
     joined_at BIGINT NOT NULL,
     PRIMARY KEY (guild_id, player_uuid),
     UNIQUE (player_uuid)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS fx_guild_roles (
     guild_id VARCHAR(64) NOT NULL,
     role_id VARCHAR(32) NOT NULL,
     display_name VARCHAR(64) NOT NULL,
-    weight INTEGER NOT NULL,
+    weight INT NOT NULL,
     flags TEXT NOT NULL,
     PRIMARY KEY (guild_id, role_id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS fx_guild_invites (
     guild_id VARCHAR(64) NOT NULL,
@@ -37,25 +37,25 @@ CREATE TABLE IF NOT EXISTS fx_guild_invites (
     inviter_uuid VARCHAR(64) NOT NULL,
     expires_at BIGINT NOT NULL,
     PRIMARY KEY (guild_id, target_uuid)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS fx_guild_upgrades (
     guild_id VARCHAR(64) NOT NULL,
     upgrade_key VARCHAR(64) NOT NULL,
-    level INTEGER NOT NULL,
+    level INT NOT NULL,
     PRIMARY KEY (guild_id, upgrade_key)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS fx_guild_chest_items (
     guild_id VARCHAR(64) NOT NULL,
-    slot INTEGER NOT NULL,
+    slot INT NOT NULL,
     item_data TEXT NOT NULL,
     PRIMARY KEY (guild_id, slot)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS fx_guild_shop_unlocks (
     guild_id VARCHAR(64) NOT NULL,
     unlock_key VARCHAR(64) NOT NULL,
     unlocked_at BIGINT NOT NULL,
     PRIMARY KEY (guild_id, unlock_key)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
