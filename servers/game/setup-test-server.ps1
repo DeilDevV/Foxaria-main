@@ -4,10 +4,11 @@ $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Split-Path -Parent $root
 $pluginsDir = Join-Path $root 'plugins'
 $logsDir = Join-Path $root 'logs'
-$foxariaJar = Join-Path $repoRoot '..\modules\foxaria-bootstrap\build\libs\foxaria-bootstrap-0.1.0-SNAPSHOT.jar'
+# FIX: Updated path to use .gradle-build instead of build
+$foxariaJar = Join-Path $repoRoot '.gradle-build\foxaria-bootstrap\libs\foxaria-bootstrap-0.1.0-SNAPSHOT.jar'
 $targetFoxariaJar = Join-Path $pluginsDir 'Foxaria.jar'
 $foxariaDataDir = Join-Path $pluginsDir 'Foxaria'
-$foxariaResourceRoot = Join-Path $repoRoot '..\modules\foxaria-bootstrap\src\main\resources'
+$foxariaResourceRoot = Join-Path $repoRoot 'modules\foxaria-bootstrap\src\main\resources'
 $foxariaModulesSource = Join-Path $foxariaResourceRoot 'modules'
 $foxariaModulesTarget = Join-Path $foxariaDataDir 'modules'
 $paperJar = Join-Path $root 'paper-1.21.11.jar'
@@ -27,8 +28,10 @@ if (-not (Test-Path -LiteralPath $foxariaJar)) {
 Copy-Item -LiteralPath $foxariaJar -Destination $targetFoxariaJar -Force
 Copy-Item -LiteralPath (Join-Path $foxariaResourceRoot 'messages.yml') -Destination (Join-Path $foxariaDataDir 'messages.yml') -Force
 Copy-Item -LiteralPath (Join-Path $foxariaResourceRoot 'config.yml') -Destination (Join-Path $foxariaDataDir 'config.yml') -Force
-Get-ChildItem -LiteralPath $foxariaModulesSource -Filter *.yml | ForEach-Object {
-    Copy-Item -LiteralPath $_.FullName -Destination (Join-Path $foxariaModulesTarget $_.Name) -Force
+if (Test-Path -LiteralPath $foxariaModulesSource) {
+    Get-ChildItem -LiteralPath $foxariaModulesSource -Filter *.yml | ForEach-Object {
+        Copy-Item -LiteralPath $_.FullName -Destination (Join-Path $foxariaModulesTarget $_.Name) -Force
+    }
 }
 
 function Download-File {
