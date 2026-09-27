@@ -1,0 +1,16 @@
+// ЗАМЕНИ строку target.sendMessage(net.kyori.adventure.text.Component.text("§6[Гильдия]...")) на это:
+
+net.kyori.adventure.text.Component inviteMsg = net.kyori.adventure.text.Component.text()
+    .append(net.kyori.adventure.text.Component.text("[Гильдия] ", net.kyori.adventure.text.format.NamedTextColor.GOLD, net.kyori.adventure.text.format.TextDecoration.BOLD))
+    .append(net.kyori.adventure.text.Component.text("Вас приглашают в гильдию ", net.kyori.adventure.text.format.NamedTextColor.WHITE))
+    .append(net.kyori.adventure.text.Component.text(guild.name(), net.kyori.adventure.text.format.NamedTextColor.YELLOW, net.kyori.adventure.text.format.TextDecoration.BOLD))
+    .append(net.kyori.adventure.text.Component.text(". "))
+    .append(net.kyori.adventure.text.Component.text("[ПРИНЯТЬ]", net.kyori.adventure.text.format.NamedTextColor.GREEN, net.kyori.adventure.text.format.TextDecoration.BOLD)
+        .hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(net.kyori.adventure.text.Component.text("Нажми, чтобы принять", net.kyori.adventure.text.format.NamedTextColor.GREEN)))
+        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/guild accept")))
+    .append(net.kyori.adventure.text.Component.text(" "))
+    .append(net.kyori.adventure.text.Component.text("[ОТКЛОНИТЬ]", net.kyori.adventure.text.format.NamedTextColor.RED, net.kyori.adventure.text.format.TextDecoration.BOLD)
+        .hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(net.kyori.adventure.text.Component.text("Нажми, чтобы отклонить", net.kyori.adventure.text.format.NamedTextColor.RED)))
+        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/guild decline")))
+    .build();
+target.sendMessage(inviteMsg);

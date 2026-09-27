@@ -15,13 +15,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 public final class TeleportRequestCommand implements CommandExecutor, TabCompleter {
-
-    public enum Mode {
-        TPA,
-        ACCEPT,
-        DENY,
-        TPA_HERE
-    }
+    public enum Mode { TPA, ACCEPT, DENY, TPA_HERE }
 
     private final Mode mode;
     private final TeleportService teleportService;
@@ -46,6 +40,7 @@ public final class TeleportRequestCommand implements CommandExecutor, TabComplet
             case DENY -> "foxaria.tpdeny";
             case TPA_HERE -> "foxaria.tpahere";
         };
+
         if (!sender.hasPermission(permission)) {
             messages.send(sender, "general.no-permission", "&cУ вас нет прав.");
             return true;
@@ -54,7 +49,7 @@ public final class TeleportRequestCommand implements CommandExecutor, TabComplet
         switch (mode) {
             case TPA -> {
                 if (args.length < 1) {
-                    messages.send(player, "teleport.usage.tpa", "&cИспользование: /tpa <игрок>");
+                    messages.send(player, "teleport.tpa-usage", "&cИспользование: /tpa <ник>");
                     return true;
                 }
                 Player target = Bukkit.getPlayerExact(args[0]);
@@ -66,7 +61,7 @@ public final class TeleportRequestCommand implements CommandExecutor, TabComplet
             }
             case TPA_HERE -> {
                 if (args.length < 1) {
-                    messages.send(player, "teleport.usage.tpahere", "&cИспользование: /tpahere <игрок>");
+                    messages.send(player, "teleport.tpahere-usage", "&cИспользование: /tpahere <ник>");
                     return true;
                 }
                 Player target = Bukkit.getPlayerExact(args[0]);
@@ -79,14 +74,19 @@ public final class TeleportRequestCommand implements CommandExecutor, TabComplet
             case ACCEPT -> teleportService.acceptTeleportRequest(player);
             case DENY -> teleportService.denyTeleportRequest(player);
         }
+
         return true;
     }
 
+
+
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (!(sender instanceof Player player) || args.length != 1 || (mode != Mode.TPA && mode != Mode.TPA_HERE) || !sender.hasPermission(mode == Mode.TPA ? "foxaria.tpa" : "foxaria.tpahere")) {
+        if (!(sender instanceof Player player) || args.length != 1 || (mode != Mode.TPA && mode != Mode.TPA_HERE)
+            || !sender.hasPermission(mode == Mode.TPA ? "foxaria.tpa" : "foxaria.tpahere")) {
             return Collections.emptyList();
         }
+
         String prefix = args[0].toLowerCase(Locale.ROOT);
         return Bukkit.getOnlinePlayers().stream()
             .filter(other -> !other.getUniqueId().equals(player.getUniqueId()))

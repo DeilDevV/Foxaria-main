@@ -1,0 +1,24 @@
+// ЗАМЕНИ строку messages.send(target, here ? "teleport.tpahere-received" : "teleport.tpa-received", ...) на это:
+
+net.kyori.adventure.text.Component tpaMsg = net.kyori.adventure.text.Component.text()
+    .append(net.kyori.adventure.text.Component.text("F", net.kyori.adventure.text.format.TextColor.color(0xFF6600), net.kyori.adventure.text.format.TextDecoration.BOLD))
+    .append(net.kyori.adventure.text.Component.text("O", net.kyori.adventure.text.format.TextColor.color(0xFF8800), net.kyori.adventure.text.format.TextDecoration.BOLD))
+    .append(net.kyori.adventure.text.Component.text("X", net.kyori.adventure.text.format.TextColor.color(0xFFAA00), net.kyori.adventure.text.format.TextDecoration.BOLD))
+    .append(net.kyori.adventure.text.Component.text("A", net.kyori.adventure.text.format.TextColor.color(0xFFCC00), net.kyori.adventure.text.format.TextDecoration.BOLD))
+    .append(net.kyori.adventure.text.Component.text("R", net.kyori.adventure.text.format.TextColor.color(0xFFDD44), net.kyori.adventure.text.format.TextDecoration.BOLD))
+    .append(net.kyori.adventure.text.Component.text("I", net.kyori.adventure.text.format.TextColor.color(0xFFEE66), net.kyori.adventure.text.format.TextDecoration.BOLD))
+    .append(net.kyori.adventure.text.Component.text("A", net.kyori.adventure.text.format.TextColor.color(0xFFFF88), net.kyori.adventure.text.format.TextDecoration.BOLD))
+    .append(net.kyori.adventure.text.Component.text(" "))
+    .append(net.kyori.adventure.text.Component.text(
+        here ? requester.getName() + " хочет, чтобы вы телепортировались к нему. "
+             : requester.getName() + " хочет телепортироваться к вам. ",
+        net.kyori.adventure.text.format.NamedTextColor.YELLOW))
+    .append(net.kyori.adventure.text.Component.text("[ПРИНЯТЬ]", net.kyori.adventure.text.format.NamedTextColor.GREEN, net.kyori.adventure.text.format.TextDecoration.BOLD)
+        .hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(net.kyori.adventure.text.Component.text("Нажми, чтобы принять", net.kyori.adventure.text.format.NamedTextColor.GREEN)))
+        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/tpaccept")))
+    .append(net.kyori.adventure.text.Component.text(" "))
+    .append(net.kyori.adventure.text.Component.text("[ОТКЛОНИТЬ]", net.kyori.adventure.text.format.NamedTextColor.RED, net.kyori.adventure.text.format.TextDecoration.BOLD)
+        .hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(net.kyori.adventure.text.Component.text("Нажми, чтобы отклонить", net.kyori.adventure.text.format.NamedTextColor.RED)))
+        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/tpdeny")))
+    .build();
+target.sendMessage(tpaMsg);

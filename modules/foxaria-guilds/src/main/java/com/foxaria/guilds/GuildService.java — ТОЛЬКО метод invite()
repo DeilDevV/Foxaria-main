@@ -1,0 +1,75 @@
+    // ======== СКОПИРУЙ И ЗАМЕНИ ТОЛЬКО ЭТОТ МЕТОД В GuildService.java ========
+
+    public void invite(Player inviter, String targetName) {
+        Player target = Bukkit.getPlayerExact(targetName);
+        if (target == null) {
+            messages.send(inviter, "guild.invite.offline", "&cИгрок &f" + targetName + " &cне в сети.");
+            return;
+        }
+        if (target.equals(inviter)) {
+            messages.send(inviter, "guild.invite.self", "&cНельзя пригласить самого себя.");
+            return;
+        }
+        repository.byPlayer(inviter.getUniqueId()).thenAccept(optGuild ->
+            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                if (optGuild.isEmpty()) {
+                    messages.send(inviter, "guild.not-in-guild", "&cВы не состоите в гильдии.");
+                    return;
+                }
+                GuildRecord guild = optGuild.get();
+                hasRolePermission(guild.id(), inviter.getUniqueId(), PERM_INVITE).thenAccept(can ->
+                    plugin.getServer().getScheduler().runTask(plugin, () -> {
+                        if (!can) {
+                            messages.send(inviter, "general.no-permission", "&cУ вас нет прав приглашать игроков.");
+                            return;
+                        }
+                        repository.byPlayer(target.getUniqueId()).thenAccept(targetGuild ->
+                            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                                if (targetGuild.isPresent()) {
+                                    messages.send(inviter, "guild.invite.already-in-guild",
+                                        "&cИгрок &f" + targetName + " &cуже состоит в гильдии.");
+                                    return;
+                                }
+                                pendingInvites.put(target.getUniqueId(), guild.id());
+                                pendingInviteExpiry.put(target.getUniqueId(), System.currentTimeMillis() + INVITE_TIMEOUT_MS);
+                                messages.send(inviter, "guild.invite.sent",
+                                    "&aПриглашение отправлено игроку &f" + targetName + "&a.");
+
+                                // КЛИКАБЕЛЬНОЕ сообщение с кнопками
+                                net.kyori.adventure.text.Component inviteMsg = net.kyori.adventure.text.Component.text()
+                                    .append(net.kyori.adventure.text.Component.text("[Гильдия] ",
+                                        net.kyori.adventure.text.format.NamedTextColor.GOLD,
+                                        net.kyori.adventure.text.format.TextDecoration.BOLD))
+                                    .append(net.kyori.adventure.text.Component.text("Вас приглашают в гильдию ",
+                                        net.kyori.adventure.text.format.NamedTextColor.WHITE))
+                                    .append(net.kyori.adventure.text.Component.text(guild.name(),
+                                        net.kyori.adventure.text.format.NamedTextColor.YELLOW,
+                                        net.kyori.adventure.text.format.TextDecoration.BOLD))
+                                    .append(net.kyori.adventure.text.Component.text(". "))
+                                    .append(net.kyori.adventure.text.Component.text("[ПРИНЯТЬ]",
+                                        net.kyori.adventure.text.format.NamedTextColor.GREEN,
+                                        net.kyori.adventure.text.format.TextDecoration.BOLD)
+                                        .hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(
+                                            net.kyori.adventure.text.Component.text("Нажми, чтобы принять")))
+                                        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/guild accept")))
+                                    .append(net.kyori.adventure.text.Component.text(" "))
+                                    .append(net.kyori.adventure.text.Component.text("[ОТКЛОНИТЬ]",
+                                        net.kyori.adventure.text.format.NamedTextColor.RED,
+                                        net.kyori.adventure.text.format.TextDecoration.BOLD)
+                                        .hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(
+                                            net.kyori.adventure.text.Component.text("Нажми, чтобы отклонить")))
+                                        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/guild decline")))
+                                    .build();
+                                target.sendMessage(inviteMsg);
+
+                                plugin.getServer().getScheduler().runTaskLater(plugin,
+                                    () -> pendingInvites.remove(target.getUniqueId()), 1200L);
+                            })
+                        );
+                    })
+                );
+            })
+        );
+    }
+
+    // ======== КОНЕЦ ЗАМЕНЫ ========

@@ -1,7 +1,7 @@
 package com.foxaria.core.listener;
 
-import com.foxaria.api.service.ServiceRegistry;
 import com.foxaria.api.service.GuildProfileService;
+import com.foxaria.api.service.ServiceRegistry;
 import com.foxaria.core.service.FoxariaPermissionService;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
@@ -21,22 +21,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Optional;
 
-/**
- * Единый чат Foxaria.
- * ! = Глобал, # = Стафф, без префикса = Локал (50 блоков).
- *
- * Тег гильдии берётся через GuildProfileService (API модуль, доступен из core).
- * Цвет тега пока берётся из guildTagOf() — если нужен прокачиваемый цвет,
- * его можно добавить в GuildProfileService.guildTagOf() на стороне guilds-модуля.
- */
 public final class InteractiveChatListener implements Listener {
-
-    private static final TextColor GLOBAL_COLOR = TextColor.color(0xFFAA55);
-    private static final TextColor LOCAL_COLOR = TextColor.color(0x55CCFF);
-    private static final TextColor STAFF_COLOR = TextColor.color(0xFF5555);
-    private static final TextColor FOXARIA_COLOR = TextColor.color(0xFFAA55);
-    private static final TextColor ARROW_COLOR = TextColor.color(0x555555);
     private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacyAmpersand();
+    private static final TextColor GLOBAL_COLOR = TextColor.color(0x55FF55);
+    private static final TextColor LOCAL_COLOR  = TextColor.color(0x55CCFF);
+    private static final TextColor STAFF_COLOR  = TextColor.color(0xFF5555);
+    private static final TextColor ARROW_COLOR  = TextColor.color(0x555555);
 
     private final JavaPlugin plugin;
     private final ServiceRegistry services;
@@ -46,108 +36,107 @@ public final class InteractiveChatListener implements Listener {
         this.services = services;
     }
 
+    private static Component foxariaGradient() {
+        return Component.text()
+            .append(Component.text("F", TextColor.color(0xFF6600), TextDecoration.BOLD))
+            .append(Component.text("O", TextColor.color(0xFF8800), TextDecoration.BOLD))
+            .append(Component.text("X", TextColor.color(0xFFAA00), TextDecoration.BOLD))
+            .append(Component.text("A", TextColor.color(0xFFCC00), TextDecoration.BOLD))
+            .append(Component.text("R", TextColor.color(0xFFDD44), TextDecoration.BOLD))
+            .append(Component.text("I", TextColor.color(0xFFEE66), TextDecoration.BOLD))
+            .append(Component.text("A", TextColor.color(0xFFFF88), TextDecoration.BOLD))
+            .append(Component.text(" "))
+            .build();
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
-        String rawMessage = PlainTextComponentSerializer.plainText().serialize(event.originalMessage());
+        String raw = PlainTextComponentSerializer.plainText().serialize(event.originalMessage());
 
         ChatType type;
         String message;
-        if (rawMessage.startsWith("#")) {
+
+        if (raw.startsWith("#")) {
             if (!player.hasPermission("foxaria.staff.chat")) {
                 player.sendMessage(Component.text("У вас нет доступа к стафф-чату.", NamedTextColor.RED));
                 event.setCancelled(true);
                 return;
             }
             type = ChatType.STAFF;
-            message = rawMessage.substring(1).trim();
-        } else if (rawMessage.startsWith("!")) {
+            message = raw.substring(1).trim();
+        } else if (raw.startsWith("!")) {
             type = ChatType.GLOBAL;
-            message = rawMessage.substring(1).trim();
+            message = raw.substring(1).trim();
         } else {
             type = ChatType.LOCAL;
-            message = rawMessage.trim();
+            message = raw.trim();
         }
 
-        if (message.isEmpty()) {
-            event.setCancelled(true);
-            return;
-        }
+        if (message.isEmpty()) { event.setCancelled(true); return; }
+        event.setCancelled(true);
 
-        event.viewers().clear();
-
-        // Ранг
         FoxariaPermissionService perms = services.optional(FoxariaPermissionService.class);
         String rankPrefix = perms != null ? perms.rankPrefixForChat(player) : "";
-        Component rankComp = rankPrefix.isEmpty()
-            ? Component.empty()
+        Component rankComp = rankPrefix.isEmpty() ? Component.empty()
             : LEGACY.deserialize(rankPrefix).append(Component.text(" "));
 
-        // Тег гильдии (через GuildProfileService из API — доступен из core)
         Component guildComp = Component.empty();
         GuildProfileService guildProfile = services.optional(GuildProfileService.class);
         if (guildProfile != null) {
             try {
                 Optional<String> nameOpt = guildProfile.guildNameOf(player.getUniqueId()).join();
                 if (nameOpt.isPresent()) {
-                    guildComp = Component.text(" [" + nameOpt.get() + "]", TextColor.color(0x55FF55))
-                        .hoverEvent(HoverEvent.showText(
-                            Component.text("Гильдия: " + nameOpt.get(), NamedTextColor.GREEN)
-                                .append(Component.newline())
-                                .append(Component.text("Нажми для инфо", NamedTextColor.DARK_GRAY))
-                        ))
+                    // guildNameOf возвращает "&aНазвание" — уже с цветом
+                    Component tag = LEGACY.deserialize("[" + nameOpt.get() + "]");
+                    guildComp = Component.text(" ").append(tag)
+                        .hoverEvent(HoverEvent.showText(Component.text("Нажми для меню гильдии", NamedTextColor.GREEN)))
                         .clickEvent(ClickEvent.runCommand("/g"));
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) { }
         }
 
-        // Сборка
-        Component foxariaPrefix = Component.text("FOXARIA ", FOXARIA_COLOR, TextDecoration.BOLD);
-        Component typeMarker = switch (type) {
-            case GLOBAL -> Component.text("<G> ", GLOBAL_COLOR, TextDecoration.BOLD);
-            case LOCAL -> Component.text("<L> ", LOCAL_COLOR, TextDecoration.BOLD);
-            case STAFF -> Component.text("<S> ", STAFF_COLOR, TextDecoration.BOLD);
-        };
+        Component typeMarker;
+        NamedTextColor msgColor;
+        switch (type) {
+            case GLOBAL -> { typeMarker = Component.text("<G> ", GLOBAL_COLOR, TextDecoration.BOLD); msgColor = NamedTextColor.WHITE; }
+            case LOCAL  -> { typeMarker = Component.text("<L> ", LOCAL_COLOR, TextDecoration.BOLD); msgColor = NamedTextColor.GRAY; }
+            case STAFF  -> { typeMarker = Component.text("[СТАФФ] ", STAFF_COLOR, TextDecoration.BOLD); msgColor = NamedTextColor.YELLOW; }
+            default -> { typeMarker = Component.empty(); msgColor = NamedTextColor.WHITE; }
+        }
 
         Component playerComp = Component.text(player.getName(), NamedTextColor.WHITE)
             .hoverEvent(HoverEvent.showText(
                 Component.text("Написать ЛС → ", NamedTextColor.GRAY)
-                    .append(Component.text(player.getName(), NamedTextColor.GOLD))
-            ))
+                    .append(Component.text(player.getName(), NamedTextColor.GOLD))))
             .clickEvent(ClickEvent.suggestCommand("/msg " + player.getName() + " "));
 
-        Component arrow = Component.text(" » ", ARROW_COLOR, TextDecoration.BOLD);
-        NamedTextColor msgColor = type == ChatType.STAFF ? NamedTextColor.YELLOW : NamedTextColor.WHITE;
-
-        Component finalMessage = Component.text()
-            .append(foxariaPrefix)
+        Component finalMsg = Component.text()
+            .append(foxariaGradient())
             .append(typeMarker)
             .append(rankComp)
             .append(playerComp)
             .append(guildComp)
-            .append(arrow)
+            .append(Component.text(" » ", ARROW_COLOR, TextDecoration.BOLD))
             .append(Component.text(message, msgColor))
             .build();
 
         switch (type) {
-            case GLOBAL -> Bukkit.broadcast(finalMessage);
+            case GLOBAL -> Bukkit.broadcast(finalMsg);
             case LOCAL -> {
                 double r2 = 50.0 * 50.0;
                 for (Player v : Bukkit.getOnlinePlayers()) {
-                    if (v.getWorld().equals(player.getWorld())
-                        && v.getLocation().distanceSquared(player.getLocation()) <= r2) {
-                        v.sendMessage(finalMessage);
+                    if (v.getWorld().equals(player.getWorld()) && v.getLocation().distanceSquared(player.getLocation()) <= r2) {
+                        v.sendMessage(finalMsg);
                     }
                 }
-                Bukkit.getConsoleSender().sendMessage(finalMessage);
+                Bukkit.getConsoleSender().sendMessage(finalMsg);
             }
             case STAFF -> {
                 for (Player v : Bukkit.getOnlinePlayers()) {
-                    if (v.hasPermission("foxaria.staff.chat")) {
-                        v.sendMessage(finalMessage);
-                    }
+                    if (v.hasPermission("foxaria.staff.chat")) v.sendMessage(finalMsg);
                 }
-                Bukkit.getConsoleSender().sendMessage(finalMessage);
+                Bukkit.getConsoleSender().sendMessage(finalMsg);
             }
         }
     }

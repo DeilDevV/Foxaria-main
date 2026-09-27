@@ -1,17 +1,16 @@
 package com.foxaria.donateshop.gui;
 
-import com.foxaria.donateshop.DonateCategory;
-import com.foxaria.donateshop.DonateShopService;
 import com.foxaria.core.gui.BaseMenu;
 import com.foxaria.core.gui.MenuItems;
 import com.foxaria.core.text.FoxariaText;
+import com.foxaria.donateshop.DonateCategory;
+import com.foxaria.donateshop.DonateShopService;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public final class DonateShopRootMenu extends BaseMenu {
-
     private final DonateShopService service;
 
     public DonateShopRootMenu(DonateShopService service) {
@@ -44,8 +43,7 @@ public final class DonateShopRootMenu extends BaseMenu {
             })
         );
 
-        // Категории: Броня (20), Оружие (21), Тотемы (22), Руны (23), Зелья (24), Остальное (25), Зачарования (26)
-        int[] slots = {20, 21, 22, 23, 24, 25, 26};
+        int[] slots = {19, 20, 21, 22, 23, 24, 25};
         DonateCategory[] cats = DonateCategory.values();
         for (int i = 0; i < cats.length && i < slots.length; i++) {
             DonateCategory cat = cats[i];

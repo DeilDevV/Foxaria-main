@@ -1,0 +1,13 @@
+// Замени строку target.sendMessage(...) в методе invite() на этот блок:
+
+Component inviteMsg = Component.text()
+    .append(Component.text("§6[Гильдия] §fВас приглашают в гильдию §e" + guild.name() + "§f. "))
+    .append(Component.text("[ПРИНЯТЬ]", net.kyori.adventure.text.format.NamedTextColor.GREEN, net.kyori.adventure.text.format.TextDecoration.BOLD)
+        .hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(Component.text("Нажми, чтобы принять приглашение", net.kyori.adventure.text.format.NamedTextColor.GREEN)))
+        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/guild accept")))
+    .append(Component.text(" "))
+    .append(Component.text("[ОТКЛОНИТЬ]", net.kyori.adventure.text.format.NamedTextColor.RED, net.kyori.adventure.text.format.TextDecoration.BOLD)
+        .hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(Component.text("Нажми, чтобы отклонить", net.kyori.adventure.text.format.NamedTextColor.RED)))
+        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/guild decline")))
+    .build();
+target.sendMessage(inviteMsg);
