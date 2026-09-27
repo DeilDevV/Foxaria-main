@@ -91,9 +91,11 @@ public final class FoxariaGuildsModule implements FoxariaModule {
         guildProxyResyncTask = new GuildProxyResyncTask(context.plugin(), service);
         guildProxyResyncTask.start();
 
+        GuildChatFormatListener guildChat = null;
         PermissionService permissionService = context.services().require(PermissionService.class);
         if (permissionService instanceof FoxariaPermissionService foxPerms) {
-            listeners.add(new GuildChatFormatListener(foxPerms, service));
+            guildChat = new GuildChatFormatListener(foxPerms, service);
+            listeners.add(guildChat);
             PlayerScoreboardService boards = context.services().optional(PlayerScoreboardService.class);
             if (boards != null) {
                 nametagService = new GuildNametagService(context.plugin(), boards, foxPerms, service);
@@ -101,7 +103,7 @@ public final class FoxariaGuildsModule implements FoxariaModule {
             }
         }
 
-        GuildCommand command = new GuildCommand(service, warEngine, context.messages());
+        GuildCommand command = new GuildCommand(service, warEngine, context.messages(), guildChat);
         PluginCommand guildCommand = context.plugin().getCommand("guild");
         if (guildCommand != null) {
             guildCommand.setExecutor(command);

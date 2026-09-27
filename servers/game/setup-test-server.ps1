@@ -1,10 +1,10 @@
 $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
-$repoRoot = Split-Path -Parent $root
+# servers/game -> servers -> Foxaria-main (repo root)
+$repoRoot = Split-Path -Parent (Split-Path -Parent $root)
 $pluginsDir = Join-Path $root 'plugins'
 $logsDir = Join-Path $root 'logs'
-# FIX: Updated path to use .gradle-build instead of build
 $foxariaJar = Join-Path $repoRoot '.gradle-build\foxaria-bootstrap\libs\foxaria-bootstrap-0.1.0-SNAPSHOT.jar'
 $targetFoxariaJar = Join-Path $pluginsDir 'Foxaria.jar'
 $foxariaDataDir = Join-Path $pluginsDir 'Foxaria'

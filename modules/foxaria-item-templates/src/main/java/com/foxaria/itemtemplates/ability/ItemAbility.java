@@ -9,68 +9,67 @@ import java.util.Optional;
 /**
  * Каталог особых способностей Foxaria.
  *
- * Каждая способность настраивается тремя числами:
- *   chance  — шанс срабатывания, 0..100 %
- *   power   — сила (радиус взрыва, урон, уровень эффекта — зависит от способности)
- *   seconds — длительность, если применимо
- *
- * Слот {@link Slot} определяет, когда способность срабатывает: в ближнем бою,
- * от стрелы, при получении урона или постоянно (пассивно в руке).
+ * Балансировка (v2): все значения power снижены до «не убивает с одного удара».
+ *   - Взрывной удар: радиус 1.5 → 1.0 (не сносит всё хп)
+ *   - Разрывная стрела: радиус 2 → 1.0
+ *   - Молния: урон регулируется силой молнии Bukkit (игровой уровень 1)
+ *   - EXECUTE: порог 25% → 15% (добивает только почти мёртвых)
+ *   - LIFE_STEAL: 20% → 15%
  */
 public enum ItemAbility {
 
     // ─── Ближний бой ───
     EXPLOSIVE_STRIKE("explosive_strike", "Взрывной удар", Slot.MELEE, Material.TNT,
-        "Взрыв в точке попадания без разрушения блоков", 25, 3, 0,
+        "Взрыв в точке попадания без разрушения блоков", 20, 1, 0,
         "радиус", "—", true, false),
 
     KNOCKBACK_BLAST("knockback_blast", "Ударная волна", Slot.MELEE, Material.PISTON,
-        "Отбрасывает цель и всех рядом стоящих", 30, 3, 0,
+        "Отбрасывает цель и всех рядом стоящих", 25, 2, 0,
         "сила", "—", true, false),
 
     FROST_BITE("frost_bite", "Обморожение", Slot.ANY_ATTACK, Material.BLUE_ICE,
-        "Замедляет и сковывает цель на время", 35, 2, 3,
+        "Замедляет и сковывает цель на время", 30, 1, 2,
         "уровень", "секунды", true, true),
 
     LIFE_STEAL("life_steal", "Вампиризм", Slot.MELEE, Material.REDSTONE,
-        "Восстанавливает часть нанесённого урона", 100, 20, 0,
+        "Восстанавливает часть нанесённого урона", 100, 15, 0,
         "% от урона", "—", true, false),
 
     LIGHTNING_STRIKE("lightning_strike", "Удар молнии", Slot.ANY_ATTACK, Material.LIGHTNING_ROD,
-        "Призывает молнию в цель", 15, 1, 0,
+        "Призывает молнию в цель", 12, 1, 0,
         "—", "—", true, false),
 
     CHAIN_LIGHTNING("chain_lightning", "Цепная молния", Slot.ANY_ATTACK, Material.COPPER_BLOCK,
-        "Разряд перескакивает на ближайших врагов", 20, 3, 0,
+        "Разряд перескакивает на ближайших врагов", 15, 2, 0,
         "целей", "—", true, false),
 
     EXECUTE("execute", "Добивание", Slot.MELEE, Material.NETHERITE_AXE,
-        "Добивает цель с низким запасом здоровья", 100, 25, 0,
+        "Добивает цель с низким запасом здоровья", 100, 15, 0,
         "% порога HP", "—", true, false),
 
     WITHER_TOUCH("wither_touch", "Иссушение", Slot.ANY_ATTACK, Material.WITHER_SKELETON_SKULL,
-        "Накладывает иссушение на цель", 25, 1, 4,
+        "Накладывает иссушение на цель", 20, 1, 3,
         "уровень", "секунды", true, true),
 
     POISON_BLADE("poison_blade", "Ядовитый клинок", Slot.ANY_ATTACK, Material.SPIDER_EYE,
-        "Отравляет цель при попадании", 30, 1, 5,
+        "Отравляет цель при попадании", 25, 1, 4,
         "уровень", "секунды", true, true),
 
     BLIND_STRIKE("blind_strike", "Ослепление", Slot.ANY_ATTACK, Material.INK_SAC,
-        "Ослепляет цель — полезно против стрелков", 20, 0, 4,
+        "Ослепляет цель — полезно против стрелков", 20, 0, 3,
         "—", "секунды", true, true),
 
     FIRE_TRAIL("fire_trail", "Испепеление", Slot.ANY_ATTACK, Material.BLAZE_POWDER,
-        "Поджигает цель на время", 30, 0, 5,
+        "Поджигает цель на время", 25, 0, 4,
         "—", "секунды", true, true),
 
     // ─── Лук и стрелы ───
     HOMING_ARROW("homing_arrow", "Самонаведение", Slot.BOW, Material.SPECTRAL_ARROW,
-        "Стрела доворачивает к ближайшей цели в полёте", 100, 12, 0,
+        "Стрела доворачивает к ближайшей цели в полёте", 100, 10, 0,
         "радиус поиска", "—", true, false),
 
     EXPLOSIVE_ARROW("explosive_arrow", "Разрывная стрела", Slot.BOW, Material.FIRE_CHARGE,
-        "Стрела взрывается при попадании", 35, 2, 0,
+        "Стрела взрывается при попадании", 25, 1, 0,
         "радиус", "—", true, false),
 
     MULTI_SHOT("multi_shot", "Веерный выстрел", Slot.BOW, Material.ARROW,
@@ -78,20 +77,20 @@ public enum ItemAbility {
         "доп. стрел", "—", true, false),
 
     TELEPORT_ARROW("teleport_arrow", "Стрела-телепорт", Slot.BOW, Material.ENDER_PEARL,
-        "Переносит стрелка в точку попадания", 20, 0, 0,
+        "Переносит стрелка в точку попадания", 15, 0, 0,
         "—", "—", true, false),
 
     // ─── Защита ───
     THORNS_AURA("thorns_aura", "Шипы возмездия", Slot.DEFENSE, Material.CACTUS,
-        "Возвращает часть урона атакующему", 40, 30, 0,
+        "Возвращает часть урона атакующему", 35, 20, 0,
         "% возврата", "—", true, false),
 
     SECOND_WIND("second_wind", "Второе дыхание", Slot.DEFENSE, Material.TOTEM_OF_UNDYING,
-        "При смертельном уроне даёт регенерацию и щит", 100, 2, 6,
+        "При смертельном уроне даёт регенерацию и щит", 100, 1, 4,
         "уровень", "секунды", true, true),
 
     DODGE("dodge", "Уклонение", Slot.DEFENSE, Material.FEATHER,
-        "Шанс полностью увернуться от удара", 15, 0, 0,
+        "Шанс полностью увернуться от удара", 12, 0, 0,
         "—", "—", true, false),
 
     // ─── Пассивные ───
@@ -123,13 +122,8 @@ public enum ItemAbility {
             this.color = color;
         }
 
-        public String title() {
-            return title;
-        }
-
-        public String color() {
-            return color;
-        }
+        public String title() { return title; }
+        public String color() { return color; }
     }
 
     private final String id;
@@ -162,67 +156,25 @@ public enum ItemAbility {
         this.usesSeconds = usesSeconds;
     }
 
-    public String id() {
-        return id;
-    }
-
-    public String title() {
-        return title;
-    }
-
-    public Slot slot() {
-        return slot;
-    }
-
-    public Material icon() {
-        return icon;
-    }
-
-    public String description() {
-        return description;
-    }
-
-    public int defaultChance() {
-        return defaultChance;
-    }
-
-    public int defaultPower() {
-        return defaultPower;
-    }
-
-    public int defaultSeconds() {
-        return defaultSeconds;
-    }
-
-    public String powerLabel() {
-        return powerLabel;
-    }
-
-    public String secondsLabel() {
-        return secondsLabel;
-    }
-
-    public boolean usesChance() {
-        return usesChance;
-    }
-
-    public boolean usesPower() {
-        return !"—".equals(powerLabel);
-    }
-
-    public boolean usesSeconds() {
-        return usesSeconds;
-    }
+    public String id() { return id; }
+    public String title() { return title; }
+    public Slot slot() { return slot; }
+    public Material icon() { return icon; }
+    public String description() { return description; }
+    public int defaultChance() { return defaultChance; }
+    public int defaultPower() { return defaultPower; }
+    public int defaultSeconds() { return defaultSeconds; }
+    public String powerLabel() { return powerLabel; }
+    public String secondsLabel() { return secondsLabel; }
+    public boolean usesChance() { return usesChance; }
+    public boolean usesPower() { return !"—".equals(powerLabel); }
+    public boolean usesSeconds() { return usesSeconds; }
 
     public static Optional<ItemAbility> byId(String raw) {
-        if (raw == null || raw.isBlank()) {
-            return Optional.empty();
-        }
+        if (raw == null || raw.isBlank()) return Optional.empty();
         String needle = raw.trim().toLowerCase(Locale.ROOT);
         for (ItemAbility ability : values()) {
-            if (ability.id.equals(needle)) {
-                return Optional.of(ability);
-            }
+            if (ability.id.equals(needle)) return Optional.of(ability);
         }
         return Optional.empty();
     }

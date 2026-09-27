@@ -30,39 +30,37 @@ public final class DonateShopRootMenu extends BaseMenu {
 
         setItem(4, MenuItems.item(Material.NETHER_STAR, "&d&lДонат-магазин", new String[]{
             "&7Оплата только &bтокенами&7.",
-            "&7Токены — на сайте и в акциях сервера.",
-            "&8 ",
-            "&7Загрузка баланса…",
-            "&7Команда: &f/token"
+            "&7Загрузка баланса…"
         }), null);
 
         service.economy().balance(player.getUniqueId()).thenAccept(snap ->
             service.plugin().getServer().getScheduler().runTask(service.plugin(), () -> {
-                if (!player.isOnline()) {
-                    return;
-                }
+                if (!player.isOnline()) return;
                 setItem(4, MenuItems.item(Material.NETHER_STAR, "&d&lДонат-магазин", new String[]{
                     "&7Оплата только &bтокенами&7.",
-                    "&7Токены — на сайте и в акциях сервера.",
                     "&8 ",
-                    "&7Ваши токены: &b" + snap.tokens(),
-                    "&7Проверить: &f/token"
+                    "&7Ваши токены: &b" + snap.tokens()
                 }), null);
             })
         );
 
-        int[] slots = {19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34};
+        // Категории: Броня (20), Оружие (21), Тотемы (22), Руны (23), Зелья (24), Остальное (25), Зачарования (26)
+        int[] slots = {20, 21, 22, 23, 24, 25, 26};
         DonateCategory[] cats = DonateCategory.values();
         for (int i = 0; i < cats.length && i < slots.length; i++) {
             DonateCategory cat = cats[i];
-            ItemStack icon = new ItemStack(cat.iconMaterial());
-            ItemMeta meta = icon.getItemMeta();
-            meta.displayName(FoxariaText.legacy(cat.displayLegacy()));
-            icon.setItemMeta(meta);
             int slot = slots[i];
-            setItem(slot, icon, e -> service.openCategory(player, cat));
+            setItem(slot, createIcon(cat), e -> service.openCategory(player, cat));
         }
 
-        setItem(45, MenuItems.item(Material.BARRIER, "&cЗакрыть", "&7Закрыть"), e -> player.closeInventory());
+        setItem(49, MenuItems.item(Material.BARRIER, "&cЗакрыть"), e -> player.closeInventory());
+    }
+
+    private ItemStack createIcon(DonateCategory cat) {
+        ItemStack icon = new ItemStack(cat.iconMaterial());
+        ItemMeta meta = icon.getItemMeta();
+        meta.displayName(FoxariaText.legacy(cat.displayLegacy()));
+        icon.setItemMeta(meta);
+        return icon;
     }
 }

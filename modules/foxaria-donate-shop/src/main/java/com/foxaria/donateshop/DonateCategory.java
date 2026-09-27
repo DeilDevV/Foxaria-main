@@ -10,9 +10,10 @@ public enum DonateCategory {
     ARMOR("armor", "&b&lБроня", Material.DIAMOND_CHESTPLATE),
     WEAPONS("weapons", "&c&lОружие", Material.NETHERITE_SWORD),
     TOTEMS("totems", "&e&lТотемы", Material.TOTEM_OF_UNDYING),
-    RUNES("runes", "&d&lРуны", Material.ENCHANTED_BOOK),
+    RUNES("runes", "&d&lРуны", Material.BOOK),
     POTIONS("potions", "&5&lЗелья", Material.POTION),
-    OTHER("other", "&7&lОстальное", Material.CHEST);
+    OTHER("other", "&7&lОстальное", Material.CHEST),
+    ENCHANTMENTS("enchantments", "&6&lЗачарования", Material.ENCHANTED_BOOK);
 
     private final String id;
     private final String displayLegacy;
@@ -24,25 +25,13 @@ public enum DonateCategory {
         this.icon = icon;
     }
 
-    public String id() {
-        return id;
-    }
-
-    public String displayLegacy() {
-        return displayLegacy;
-    }
-
-    public Material iconMaterial() {
-        return icon;
-    }
+    public String id() { return id; }
+    public String displayLegacy() { return displayLegacy; }
+    public Material iconMaterial() { return icon; }
 
     public static Optional<DonateCategory> parse(String raw) {
-        if (raw == null) {
-            return Optional.empty();
-        }
+        if (raw == null) return Optional.empty();
         String k = raw.trim().toLowerCase(Locale.ROOT);
-        return Arrays.stream(values())
-            .filter(c -> c.id.equals(k))
-            .findFirst();
+        return Arrays.stream(values()).filter(c -> c.id.equals(k)).findFirst();
     }
 }

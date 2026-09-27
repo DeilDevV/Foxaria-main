@@ -3,7 +3,6 @@ package com.foxaria.donateshop;
 import com.foxaria.api.service.DatabaseGateway;
 import com.foxaria.core.util.ItemStackSerializer;
 import org.bukkit.inventory.ItemStack;
-
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,20 +11,26 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public final class DonateShopRepository {
-
     private final DatabaseGateway database;
+    private final List<DonateOffer> memoryOffers = new ArrayList<>();
 
     public DonateShopRepository(DatabaseGateway database) {
         this.database = database;
+    }
+
+    public void addOffer(DonateOffer offer) {
+        if (offer != null) {
+            this.memoryOffers.add(offer);
+        }
     }
 
     public CompletableFuture<List<DonateOffer>> listByCategory(DonateCategory category) {
         return database.query(connection -> {
             List<DonateOffer> list = new ArrayList<>();
             try (var statement = database.prepare(connection, """
-                SELECT id, category, price_tokens, item_blob, sort_order
-                FROM fx_donate_shop_offers
-                WHERE category = ?
+                SELECT id, category, price_tokens, item_blob, sort_order 
+                FROM fx_donate_shop_offers 
+                WHERE category = ? 
                 ORDER BY sort_order ASC, created_at ASC
                 """, category.id());
                  ResultSet rs = statement.executeQuery()) {
@@ -40,10 +45,10 @@ public final class DonateShopRepository {
 
     public CompletableFuture<List<DonateOffer>> listAll() {
         return database.query(connection -> {
-            List<DonateOffer> list = new ArrayList<>();
+            List<DonateOffer> list = new ArrayList<>(memoryOffers);
             try (var statement = database.prepare(connection, """
-                SELECT id, category, price_tokens, item_blob, sort_order
-                FROM fx_donate_shop_offers
+                SELECT id, category, price_tokens, item_blob, sort_order 
+                FROM fx_donate_shop_offers 
                 ORDER BY category, sort_order ASC, created_at ASC
                 """);
                  ResultSet rs = statement.executeQuery()) {
@@ -58,8 +63,9 @@ public final class DonateShopRepository {
     public CompletableFuture<Optional<DonateOffer>> findById(String id) {
         return database.query(connection -> {
             try (var statement = database.prepare(connection, """
-                SELECT id, category, price_tokens, item_blob, sort_order
-                FROM fx_donate_shop_offers WHERE id = ?
+                SELECT id, category, price_tokens, item_blob, sort_order 
+                FROM fx_donate_shop_offers 
+                WHERE id = ?
                 """, id);
                  ResultSet rs = statement.executeQuery()) {
                 if (!rs.next()) {
@@ -77,13 +83,7 @@ public final class DonateShopRepository {
             try (var statement = database.prepare(connection, """
                 INSERT INTO fx_donate_shop_offers (id, category, price_tokens, item_blob, sort_order, created_at)
                 VALUES (?, ?, ?, ?, ?, ?)
-                """,
-                offer.id(),
-                offer.category().id(),
-                offer.priceTokens(),
-                blob,
-                offer.sortOrder(),
-                now
+                """, offer.id(), offer.category().id(), offer.priceTokens(), blob, offer.sortOrder(), now
             )) {
                 statement.executeUpdate();
             }

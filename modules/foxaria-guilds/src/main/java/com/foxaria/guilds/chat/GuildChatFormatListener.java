@@ -3,25 +3,26 @@ package com.foxaria.guilds.chat;
 import com.foxaria.core.service.FoxariaPermissionService;
 import com.foxaria.guilds.GuildModels.GuildRecord;
 import com.foxaria.guilds.GuildService;
-import io.papermc.paper.chat.ChatRenderer;
-import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+
 import java.util.Optional;
 
-/**
- * Чат: префикс + серый ник + название гильдии (без скобок), hover со статистикой.
- */
 public final class GuildChatFormatListener implements Listener {
 
-    private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacySection();
+    private static final TextColor FOXARIA_COLOR = TextColor.color(0xFFAA55);
+    private static final TextColor GUILD_MARKER_COLOR = TextColor.color(0x55FF55);
+    private static final TextColor ARROW_COLOR = TextColor.color(0x555555);
+    private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacyAmpersand();
 
     private final FoxariaPermissionService permissions;
     private final GuildService guilds;
@@ -31,34 +32,59 @@ public final class GuildChatFormatListener implements Listener {
         this.guilds = guilds;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onChat(AsyncChatEvent event) {
-        Player player = event.getPlayer();
-        String prefixRaw = permissions.rankPrefixForChat(player);
-        Optional<GuildRecord> guild = guilds.guildOf(player.getUniqueId()).join();
-
-        Component prefixComp = prefixRaw.isEmpty()
-            ? Component.empty()
-            : LEGACY.deserialize(ChatColor.translateAlternateColorCodes('&', prefixRaw));
-
-        final Component guildSuffix;
-        if (guild.isPresent()) {
-            GuildRecord g = guild.get();
-            String colored = ChatColor.translateAlternateColorCodes('&', guilds.legacyColorForGuildTag(g.tagColor()));
-            Component tag = LEGACY.deserialize(colored + g.name())
-                .hoverEvent(HoverEvent.showText(guilds.guildChatHoverText(g)));
-            guildSuffix = Component.text(" ").append(tag);
-        } else {
-            guildSuffix = Component.empty();
+    public void sendGuildMessage(Player sender, String message) {
+        Optional<GuildRecord> guildOpt = guilds.guildOf(sender.getUniqueId()).join();
+        if (guildOpt.isEmpty()) {
+            sender.sendMessage(Component.text("Вы не состоите в гильдии.", NamedTextColor.RED));
+            return;
         }
+        GuildRecord guild = guildOpt.get();
+        String prefixRaw = permissions.rankPrefixForChat(sender);
+        String cleanRank = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', prefixRaw)).trim();
 
-        event.renderer(ChatRenderer.viewerUnaware((source, sourceDisplayName, message) -> {
-            Component name = Component.text(source.getName(), NamedTextColor.GRAY);
-            Component line = Component.empty();
-            if (!prefixRaw.isEmpty()) {
-                line = line.append(prefixComp).append(Component.text(" "));
+        // Цвет тега гильдии — сохраняем через legacyColorForGuildTag
+        String colorCode = guilds.legacyColorForGuildTag(guild.tagColor());
+        String tagText = colorCode + "[" + guild.name() + "]&r";
+
+        Component foxariaPrefix = Component.text("FOXARIA ", FOXARIA_COLOR, TextDecoration.BOLD);
+        Component typeMarker = Component.text("<Г> ", GUILD_MARKER_COLOR, TextDecoration.BOLD);
+        Component rankComp = cleanRank.isEmpty()
+            ? Component.empty()
+            : Component.text(cleanRank + " ", NamedTextColor.GRAY);
+
+        Component playerComp = Component.text(sender.getName(), NamedTextColor.WHITE)
+            .hoverEvent(HoverEvent.showText(
+                Component.text("Написать ЛС → ", NamedTextColor.GRAY)
+                    .append(Component.text(sender.getName(), NamedTextColor.GOLD))
+            ))
+            .clickEvent(ClickEvent.suggestCommand("/msg " + sender.getName() + " "));
+
+        // Тег с цветом гильдии, кликабельный
+        Component guildTag = Component.text(" ")
+            .append(LEGACY.deserialize(tagText)
+                .hoverEvent(HoverEvent.showText(guilds.guildChatHoverText(guild)))
+                .clickEvent(ClickEvent.runCommand("/g info " + guild.name()))
+            );
+
+        Component arrow = Component.text(" » ", ARROW_COLOR, TextDecoration.BOLD);
+        Component msgComp = Component.text(message, NamedTextColor.GREEN);
+
+        Component finalMessage = Component.text()
+            .append(foxariaPrefix)
+            .append(typeMarker)
+            .append(rankComp)
+            .append(playerComp)
+            .append(guildTag)
+            .append(arrow)
+            .append(msgComp)
+            .build();
+
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            if (viewer.getUniqueId().equals(sender.getUniqueId())
+                || guilds.isSameGuild(sender.getUniqueId(), viewer.getUniqueId())) {
+                viewer.sendMessage(finalMessage);
             }
-            return line.append(name).append(guildSuffix).append(Component.text(": ", NamedTextColor.DARK_GRAY)).append(message);
-        }));
+        }
+        Bukkit.getConsoleSender().sendMessage(finalMessage);
     }
 }

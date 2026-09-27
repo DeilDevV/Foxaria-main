@@ -23,6 +23,7 @@ import com.foxaria.core.command.PermDebugCommand;
 import com.foxaria.core.command.TeleportRequestCommand;
 import com.foxaria.core.gui.MenuManager;
 import com.foxaria.core.listener.CoreGameplayListener;
+import com.foxaria.core.listener.InteractiveChatListener;
 import com.foxaria.core.listener.FoxariaProxyChatPrefixListener;
 import com.foxaria.core.listener.FirstJoinRtpListener;
 import com.foxaria.core.listener.FirstJoinRtpGuardListener;
@@ -75,6 +76,7 @@ public final class FoxariaCoreModule implements FoxariaModule {
     private PlayerFlowService playerFlowService;
     private SleepersService sleepersService;
     private DatabaseGateway databaseGateway;
+    private InteractiveChatListener interactiveChatListener;
 
     @Override
     public String id() {
@@ -173,6 +175,10 @@ public final class FoxariaCoreModule implements FoxariaModule {
         sidebarService = new SidebarService(plugin, configService, registry, playerScoreboards);
         sidebarService.start();
 
+
+        interactiveChatListener = new InteractiveChatListener(plugin, registry);
+        plugin.getServer().getPluginManager().registerEvents(interactiveChatListener, plugin);
+
         proxyChatPrefixListener = new FoxariaProxyChatPrefixListener(plugin, permissionService, sidebarService);
         plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, "foxaria:proxy", proxyChatPrefixListener);
         plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "foxaria:proxy");
@@ -225,6 +231,10 @@ public final class FoxariaCoreModule implements FoxariaModule {
 
     @Override
     public void stop() {
+        if (interactiveChatListener != null) {
+            HandlerList.unregisterAll(interactiveChatListener);
+            interactiveChatListener = null;
+        }
         if (listener != null) {
             HandlerList.unregisterAll(listener);
         }
